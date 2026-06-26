@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, Button } from "@heroui/react";
 import logo from "../assets/logo.png";
 import Image from "next/image";
+import Navlink from "@/components/Navlink";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,7 +51,7 @@ export default function Navbar() {
                 alt="Logo"
                 className="h-10 w-10 rounded-full object-cover"
               />
-              <p className="font-bold text-xl">
+              <p className="font-bold text-[#c4e1f0] text-xl">
                 Start<span className="text-[#6998AB]">Hub</span>
                 <span className="text-[#406882]">X</span>
               </p>
@@ -59,49 +60,77 @@ export default function Navbar() {
         </div>
         <ul className="hidden items-center gap-4 md:flex">
           <li>
-            <Link href="/">Home</Link>
+            <Navlink
+              className={
+                "transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
+              }
+              href="/"
+            >
+              Home
+            </Navlink>
           </li>
           <li>
-            <Link
+            <Navlink
+              className={
+                "transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
+              }
               href="/Startups"
-              className="font-medium text-accent"
-              aria-current="page"
             >
               Startups
-            </Link>
+            </Navlink>
           </li>
           <li>
-            <Link href="/Opportunities">Opportunities</Link>
+            <Navlink
+              className={
+                "transition-transform  duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
+              }
+              href="/Opportunities"
+            >
+              Opportunities
+            </Navlink>
           </li>
         </ul>
         <div className="hidden items-center gap-4 md:flex">
-          <Link href="#">Login</Link>
-          <Button>Sign Up</Button>
+          <Link href="#" className="text-[#c4e1f0] hover:text-[#6998AB]">
+            Login
+          </Link>
+          <Button className="bg-[#173b52] hover:bg-[#1e4360] text-[#c4e1f0]">
+            Sign Up
+          </Button>
         </div>
       </header>
       {isMenuOpen && (
         <div className="border-t border-separator md:hidden">
           <ul className="flex flex-col gap-2 p-4">
             <li>
-              <Link href="/" className="block py-2">
+              <Navlink
+                className={
+                  "transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
+                }
+                href="/"
+              >
                 Home
-              </Link>
+              </Navlink>
             </li>
             <li>
-              <Link href="#" className="block py-2 font-medium text-accent">
-                Dashboard
-              </Link>
+              <Navlink
+                className={
+                  "transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
+                }
+                href="/Startups"
+              >
+                Startups
+              </Navlink>
             </li>
             <li>
-              <Link href="#" className="block py-2">
-                Pricing
-              </Link>
-            </li>
-            <li className="mt-4 flex flex-col gap-2 border-t border-separator pt-4">
-              <Link href="#" className="block py-2">
-                Login
-              </Link>
-              <Button className="w-full">Sign Up</Button>
+              <Navlink
+                className={
+                  "transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
+                }
+                href="/Opportunities"
+              >
+                Opportunities
+              </Navlink>
             </li>
           </ul>
         </div>
