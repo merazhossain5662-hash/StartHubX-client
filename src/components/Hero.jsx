@@ -6,7 +6,7 @@ import { Aperture, ArrowRight } from "@gravity-ui/icons";
 
 const Hero = () => {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative w-full min-h-150 md:h-175 lg:h-175">
       <Image
         src={bgImage}
         alt="Background"
