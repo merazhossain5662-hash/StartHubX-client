@@ -1,14 +1,28 @@
 "use client";
 
 import { LogoFacebook, LogoGithub, LogoLinkedin } from "@gravity-ui/icons";
+import Image from "next/image";
 import Link from "next/link";
+import logo from "../assets/logo.png";
 
 export default function Footer() {
   return (
     <footer className="bg-[#020617] text-gray-300 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         <div>
-          <h2 className="text-xl font-bold text-white">StartHubX</h2>
+          <div className="flex items-center ">
+            <Image
+              src={logo}
+              height={35}
+              width={35}
+              alt="Logo"
+              className="h-8 w-8 rounded-full object-cover"
+            />
+            <p className="font-bold text-[#c4e1f0] text-lg">
+              Start<span className="text-[#6998AB]">Hub</span>
+              <span className="text-[#406882]">X</span>
+            </p>
+          </div>
           <p className="mt-3 text-sm text-gray-400 wrap-break-word">
             Build startups together. Connect with founders and talented
             collaborators.

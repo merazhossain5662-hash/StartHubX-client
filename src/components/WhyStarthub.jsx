@@ -4,7 +4,7 @@ import { Card } from "@heroui/react";
 
 const WhyStarthub = () => {
   return (
-    <div className="w-10/12 mx-auto min-h-150 md:min-h-160 text-center px-4 py-5 space-y-4 my-5 md:my-10">
+    <div className="w-10/12 mx-auto min-h-150 md:min-h-160 text-center px-4 py-5 space-y-4 mt-7 ">
       <div>
         <h1 className="text-3xl md:text-4xl font-semibold mb-4">
           Why <span className="text-[#8dd0f2]">StartHub?</span>
