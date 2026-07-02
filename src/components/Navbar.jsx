@@ -205,7 +205,7 @@ export default function Navbar() {
                     </Avatar.Fallback>
                   </Avatar>
                 </Popover.Trigger>
-                <Popover.Content className="max-w-64 bg-transparent border backdrop-blur-lg">
+                <Popover.Content className="max-w-64 bg-transparent border backdrop-blur-sm">
                   <Popover.Dialog className="w-full">
                     <Popover.Arrow />
 
