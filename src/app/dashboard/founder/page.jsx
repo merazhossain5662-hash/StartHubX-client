@@ -1,11 +1,22 @@
-"use client";
 import OverviewDiv from "@/components/OverviewDiv";
-import { useSession } from "@/lib/auth-client";
 import { Spinner } from "@heroui/react";
 import React from "react";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-const founderPage = () => {
-  const { data: sessaion, isPending } = useSession();
+const founderPage = async () => {
+  const { user, isPending } = await auth.api.getSession({
+    headers: await headers(), // some endpoints might require headers
+  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URI}/api/startups?email=${user?.email}`,
+  );
+  const startupData = await res.json();
+  const startupId = startupData[0]?._id;
+  const opportunityRes = await fetch(
+    `${process.env.NEXT_PUBLIC_URI}/api/opportunity?startupId=${startupId}`,
+  );
+  const opportunityData = await opportunityRes.json();
   if (isPending) {
     return (
       <div className="flex items-center gap-4">
@@ -17,12 +28,12 @@ const founderPage = () => {
   return (
     <div>
       <h1 className="text-lg md:text-2xl ">
-        Wellcome, <span className="font-bold ml-1">{sessaion.user.name}</span>
+        Wellcome, <span className="font-bold ml-1">{user.name}</span>
       </h1>
       <p className="text-xs md:text-sm text-gray-500">
         Here's an overview of your startup activity.
       </p>
-      <OverviewDiv />
+      <OverviewDiv opportunityData={opportunityData || []} />
     </div>
   );
 };

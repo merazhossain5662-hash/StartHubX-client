@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "@heroui/react";
 import { Briefcase, SquareArticle, PersonPlus } from "@gravity-ui/icons";
-const OverviewDiv = () => {
+const OverviewDiv = ({ opportunityData }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-wrap gap-4 mt-4">
       <div>
@@ -11,7 +11,7 @@ const OverviewDiv = () => {
               <Briefcase className="text-[#8dd0f2] size-7" />
             </span>
             <div>
-              <h1 className="text-2xl">0</h1>
+              <h1 className="text-2xl">{opportunityData.length}</h1>
               <p className="text-sm hover:text-[#8dd0f2] text-gray-700">
                 Total Opportunities
               </p>
