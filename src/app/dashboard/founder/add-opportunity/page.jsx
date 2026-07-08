@@ -9,7 +9,7 @@ const AddOpportunityPage = async () => {
     headers: await headers(), // some endpoints might require headers
   });
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_URI}/api/startups?email=${session?.user?.email}`,
+    `${process.env.NEXT_PUBLIC_URI}/api/startup/${session?.user?.email}`,
   );
   const startupData = await res.json();
   return (

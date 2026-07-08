@@ -8,7 +8,7 @@ const BrowseStartups = async () => {
 
   return (
     <div>
-      <BrowseStartupComponent datas={datas}></BrowseStartupComponent>
+      <BrowseStartupComponent datas={datas || []}></BrowseStartupComponent>
     </div>
   );
 };

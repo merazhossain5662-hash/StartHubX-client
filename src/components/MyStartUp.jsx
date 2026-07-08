@@ -106,6 +106,7 @@ const MystartupComponent = ({ email, startupData }) => {
       },
       body: JSON.stringify(data),
     });
+    alert("sdmfiojwo dsje");
     router.refresh();
   };
   return (

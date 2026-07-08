@@ -9,12 +9,12 @@ const founderPage = async () => {
     headers: await headers(), // some endpoints might require headers
   });
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_URI}/api/startups?email=${user?.email}`,
+    `${process.env.NEXT_PUBLIC_URI}/api/startup/${user?.email}`,
   );
   const startupData = await res.json();
   const startupId = startupData[0]?._id;
   const opportunityRes = await fetch(
-    `${process.env.NEXT_PUBLIC_URI}/api/opportunity?startupId=${startupId}`,
+    `${process.env.NEXT_PUBLIC_URI}/api/opportunitise/${startupId}`,
   );
   const opportunityData = await opportunityRes.json();
   if (isPending) {
