@@ -33,7 +33,7 @@ const BrowseStartupComponent = ({ datas }) => {
   const stages = ["All", ...new Set(datas.map((d) => d.FundingStage))];
 
   return (
-    <div className="min-h-screen bg-[#070b1a] text-white px-6 py-10">
+    <div className="min-h-screen  text-white px-6 py-10">
       {/* 🔥 Header */}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold">
