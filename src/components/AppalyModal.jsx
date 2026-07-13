@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Envelope, Link, PaperPlane } from "@gravity-ui/icons";
 
 import {
@@ -16,11 +16,26 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
-import { redirect } from "next/navigation";
-const AppalyModal = ({ opportunityData, StartupData, user, userEmail }) => {
+import { redirect, useRouter } from "next/navigation";
+const AppalyModal = ({ opportunityData, StartupData, user }) => {
+  const router = useRouter();
   const userRole = user?.role.toLowerCase();
   const [isOpen, setIsOpen] = useState(false);
+  const [isApplaid, setIsApplaid] = useState(null);
 
+  if (user) {
+    useEffect(() => {
+      const fetchData = async () => {
+        const applicationRes = await fetch(
+          `${process.env.NEXT_PUBLIC_URI}/api/application/${user.email}/${opportunityData._id}`,
+        );
+        const applaidApplication = await applicationRes.json();
+        console.log(applaidApplication);
+        setIsApplaid(applaidApplication);
+      };
+      fetchData();
+    }, [setIsApplaid, opportunityData, user]);
+  }
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -31,6 +46,7 @@ const AppalyModal = ({ opportunityData, StartupData, user, userEmail }) => {
     });
     data.opportunityId = opportunityData._id;
     data.startupId = StartupData._id;
+    data.status = "pending";
     await fetch(`${process.env.NEXT_PUBLIC_URI}/api/application`, {
       method: "POST",
       headers: {
@@ -38,9 +54,11 @@ const AppalyModal = ({ opportunityData, StartupData, user, userEmail }) => {
       },
       body: JSON.stringify(data),
     });
+
     alert("Form submitted successfully!");
 
     setIsOpen(false);
+    router.refresh();
   };
 
   return (
@@ -53,6 +71,8 @@ const AppalyModal = ({ opportunityData, StartupData, user, userEmail }) => {
           >
             Login To Applay
           </Button>
+        ) : isApplaid ? (
+          <Button isDisabled>Applied</Button>
         ) : userRole === "collaborator" ? (
           <Button onPress={() => setIsOpen(true)}>Applay Now</Button>
         ) : (
@@ -99,7 +119,7 @@ const AppalyModal = ({ opportunityData, StartupData, user, userEmail }) => {
                             readOnly
                             name="ApplicantEmail"
                             type="email"
-                            defaultValue={userEmail}
+                            defaultValue={user?.email}
                             variant="secondary"
                             className=" bg-gray-900 text-gray-600 focus:bg-transparent border border-[#224764] focus:border-[#8dd0f2]/70 focus:ring-1 focus:ring-[#8dd0f2]/70 h-12 pl-10 w-full"
                           />

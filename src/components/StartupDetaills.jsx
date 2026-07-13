@@ -1,5 +1,5 @@
 import React from "react";
-import { Chip, Button, Avatar } from "@heroui/react";
+import { Chip, Avatar, Button } from "@heroui/react";
 import {
   ArrowLeft,
   Globe,
@@ -18,6 +18,7 @@ const StartupDetaills = async ({ data, opportunityData = [] }) => {
   const sessaion = await auth.api.getSession({
     headers: await headers(), // some endpoints might require headers
   });
+
   // Gracefully handle dynamic fields fallback if your data naming switches around
   const startupName = data?.name || "Startup Name";
   const status = data?.status || "pending";
@@ -116,53 +117,56 @@ const StartupDetaills = async ({ data, opportunityData = [] }) => {
           {/* 📦 Roles Grid Matrix Layout */}
           {opportunityData.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {opportunityData.map((role) => (
-                <div
-                  key={role._id}
-                  className="bg-[#0f172a]/40 border border-gray-800/80 rounded-2xl p-6 flex flex-col justify-between hover:border-gray-700/80 transition space-y-6"
-                >
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-bold text-gray-100">
-                      {role.Title}
-                    </h3>
+              {opportunityData.map(async (role) => {
+                console.log(role._id);
 
-                    {/* Skills Mapping Badges */}
-                    <div className="flex flex-wrap gap-1.5">
-                      {role.Skills?.map((skill, idx) => (
-                        <Chip
-                          key={idx}
-                          size="sm"
-                          variant="flat"
-                          className="bg-[#141233] text-[#7c3aed] border border-[#7c3aed]/20 text-[11px] font-medium"
-                        >
-                          {skill}
-                        </Chip>
-                      ))}
-                    </div>
-                  </div>
+                return (
+                  <div
+                    key={role._id}
+                    className="bg-[#0f172a]/40 border border-gray-800/80 rounded-2xl p-6 flex flex-col justify-between hover:border-gray-700/80 transition space-y-6"
+                  >
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-gray-100">
+                        {role.Title}
+                      </h3>
 
-                  <div className="space-y-4">
-                    {/* Remote/Commitment meta items */}
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
-                      <div className="flex items-center gap-1">
-                        <Globe size={12} className="text-gray-500" />
-                        <span>{role.state?.toLowerCase()}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock size={12} className="text-gray-500" />
-                        <span>{role.CommitmentLevel?.toLowerCase()}</span>
+                      {/* Skills Mapping Badges */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {role.Skills?.map((skill, idx) => (
+                          <Chip
+                            key={idx}
+                            size="sm"
+                            variant="flat"
+                            className="bg-[#141233] text-[#7c3aed] border border-[#7c3aed]/20 text-[11px] font-medium"
+                          >
+                            {skill}
+                          </Chip>
+                        ))}
                       </div>
                     </div>
 
-                    <AppalyModal
-                      opportunityData={role}
-                      StartupData={data}
-                      user={sessaion?.user || null}
-                      userEmail={sessaion?.user?.email || null}
-                    ></AppalyModal>
+                    <div className="space-y-4">
+                      {/* Remote/Commitment meta items */}
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
+                        <div className="flex items-center gap-1">
+                          <Globe size={12} className="text-gray-500" />
+                          <span>{role.state?.toLowerCase()}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock size={12} className="text-gray-500" />
+                          <span>{role.CommitmentLevel?.toLowerCase()}</span>
+                        </div>
+                      </div>
+
+                      <AppalyModal
+                        opportunityData={role}
+                        StartupData={data}
+                        user={sessaion?.user || null}
+                      ></AppalyModal>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="border border-dashed border-gray-800 rounded-2xl p-12 text-center">
