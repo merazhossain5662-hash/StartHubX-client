@@ -9,13 +9,17 @@ import {
   ChartColumnStacked,
   Rocket,
   SquareArticle,
+  Rectangles4,
 } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export function DashboardSidebar() {
   const { data: session, isPending } = useSession();
-  const navItems = [
+  const [dynamicItems, setDynamicItems] = useState([]);
+  const navItems = dynamicItems;
+  const founderItems = [
     {
       icon: ChartColumnStacked,
       label: "Overview",
@@ -42,6 +46,30 @@ export function DashboardSidebar() {
       href: `/dashboard/${session?.user?.role.toLowerCase()}/applications`,
     },
   ];
+  const collaboretorItems = [
+    {
+      icon: ChartColumnStacked,
+      label: "Overview",
+      href: `/dashboard/${session?.user?.role.toLowerCase()}`,
+    },
+    {
+      icon: ListUl,
+      label: "My Applications",
+      href: `/dashboard/${session?.user?.role.toLowerCase() || "collaboretor"}/my-applications`,
+    },
+    {
+      icon: Rectangles4,
+      label: "Browse Opportunities",
+      href: "/Opportunities",
+    },
+  ];
+  useEffect(() => {
+    if (session?.user?.role.toLowerCase() === "founder") {
+      setDynamicItems(founderItems);
+    } else if (session?.user?.role.toLowerCase() === "collaborator") {
+      setDynamicItems(collaboretorItems);
+    }
+  }, [session, founderItems, collaboretorItems, setDynamicItems]);
   const pathName = usePathname();
   console.log("pathName", pathName);
   const navContent = (
