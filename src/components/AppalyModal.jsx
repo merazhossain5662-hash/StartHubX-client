@@ -20,6 +20,7 @@ import { redirect, useRouter } from "next/navigation";
 const AppalyModal = ({ opportunityData, StartupData, user }) => {
   const router = useRouter();
   const userRole = user?.role.toLowerCase();
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isApplaid, setIsApplaid] = useState(null);
 
@@ -38,6 +39,8 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
   }
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const formData = new FormData(e.currentTarget);
     const data = {};
     // Convert FormData to plain object
@@ -45,8 +48,10 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
       data[key] = value.toString();
     });
     data.opportunityId = opportunityData._id;
+    data.opportunityTitle = opportunityData?.Title;
     data.startupId = StartupData._id;
     data.status = "pending";
+    data.isOrphan = false;
     await fetch(`${process.env.NEXT_PUBLIC_URI}/api/application`, {
       method: "POST",
       headers: {
@@ -59,6 +64,7 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
 
     setIsOpen(false);
     router.refresh();
+    setLoading(false);
   };
 
   return (
@@ -171,7 +177,7 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
                         className="button button--md button--primary round  bg-linear-to-r  from-[#173b52] via-[#1e4360] to-[#21435a] text-[#c4e1f0]  rounded-xl shadow-md hover:shadow-lg transition duration-300 ease-in-out"
                       >
                         <PaperPlane />
-                        Submit Application{" "}
+                        {loading ? "Submiting..." : "  Submit Application"}
                       </Button>
                       <Button
                         slot={"close"}

@@ -13,6 +13,12 @@ const founderPage = async () => {
   );
   const startupData = await res.json();
   const startupId = startupData[0]?._id;
+  const ApplicationsRes = await fetch(
+    `${process.env.NEXT_PUBLIC_URI}/api/applications/${startupId}`,
+  );
+  const applicationsData = await ApplicationsRes.json();
+  const activeApplications =
+    applicationsData?.filter((app) => !app?.isOrphan) || [];
   const opportunityRes = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/opportunitise/${startupId}`,
   );
@@ -33,7 +39,10 @@ const founderPage = async () => {
       <p className="text-xs md:text-sm text-gray-500">
         Here's an overview of your startup activity.
       </p>
-      <OverviewDiv opportunityData={opportunityData || []} />
+      <OverviewDiv
+        opportunityData={opportunityData || []}
+        activeApplications={activeApplications}
+      />
     </div>
   );
 };

@@ -19,6 +19,7 @@ import logo from "../assets/logo.png";
 import Image from "next/image";
 import Navlink from "@/components/Navlink";
 import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -161,7 +162,10 @@ export default function Navbar() {
                         <li className="">Profile</li>
                       </Link>
                       <button
-                        onClick={() => authClient.signOut()}
+                        onClick={() => {
+                          authClient.signOut();
+                          redirect("/login");
+                        }}
                         className="flex text-red-600/70 hover:text-red-600 w-full hover:bg-red-600/10 hover:rounded-lg transition-all duration-300 ease-in-out hover:translate-x-0.5 py-2 px-1"
                       >
                         <ArrowRightFromSquare className="text-red-600/70 hover:text-red-600 w-5 h-5 mr-2 inline-block" />

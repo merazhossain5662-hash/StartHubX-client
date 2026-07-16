@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Chip } from "@heroui/react";
+import { Button, Card, Chip } from "@heroui/react";
 import {
   Globe,
   Calendar,
@@ -84,9 +84,13 @@ const ManageOpportunityComponent = ({ opportunityData, startupData }) => {
           ))}
         </div>
       ) : (
-        <p className="text-sm md:text-base text-gray-400">
-          No opportunities posted yet.
-        </p>
+        <div>
+          <Card className="min-w-70 bg-[#03111b] space-y-3 hover:bg-[#030e17] border-gray-800 hover:border-[#224764] border min-h-40 backdrop-blur-2xl ">
+            <Card.Content className="flex flex-col items-center justify-center gap-2">
+              <h1 className="text-xl">No Opportunities posted yet.</h1>
+            </Card.Content>
+          </Card>
+        </div>
       )}
     </div>
   );

@@ -33,7 +33,6 @@ const StartupDetaills = async ({ data, opportunityData = [] }) => {
   return (
     <div className="min-h-screen  text-white px-6 py-10">
       <div className="max-w-6xl mx-auto space-y-10">
-        {/* 🔙 Back navigation link */}
         <Link
           href="/Startups"
           className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition"
