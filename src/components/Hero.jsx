@@ -13,7 +13,7 @@ const Hero = () => {
         fill
         quality={100}
         unoptimized
-        className="object-cover object-center -z-10 w-full max-h-180"
+        className="object-cover object-center -z-10 w-full  max-h-180"
       />
       <div className="absolute space-y-8 my-10 md:my-19 mx-auto w-full flex flex-col justify-center items-center text-center px-4">
         <Badge

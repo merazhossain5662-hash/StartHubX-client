@@ -10,6 +10,7 @@ import {
   Rocket,
   SquareArticle,
   Rectangles4,
+  PersonGear,
 } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
@@ -110,6 +111,14 @@ export function DashboardSidebar() {
         </div>
         <Separator className="my-2" />
         {navContent}
+        <Separator className="my-2" />
+        <Link
+          href="/profile"
+          className="flex gap-2 items-center p-2 w-full hover:bg-[#1e4360]/25 hover:rounded-lg transition-all duration-300 ease-in-out hover:translate-x-0.5 rounded-xl px-3 py-2.5 text-sm "
+        >
+          <PersonGear className="text-slate-400"></PersonGear>{" "}
+          <span className="text-slate-400">Profile</span>
+        </Link>
       </aside>
       <Drawer>
         <Button className="lg:hidden" variant="secondary">
