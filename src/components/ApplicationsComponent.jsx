@@ -49,12 +49,12 @@ const ApplicationsComponent = ({ applicationsData, opportunityData }) => {
           <Card.Title>
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-lg ">{opportunityData?.Title}</h1>
-              {applicationsData?.status === "approved" ? (
+              {applicationsData?.status === "accepted" ? (
                 <Chip
                   size="sm"
                   className="bg-[#0c2a23] text-[#10b981] font-medium border border-[#10b981]/20"
                 >
-                  approved
+                  accepted
                 </Chip>
               ) : applicationsData?.status === "rejected" ? (
                 <Chip
@@ -110,7 +110,7 @@ const ApplicationsComponent = ({ applicationsData, opportunityData }) => {
       {applicationsData?.status === "pending" ? (
         <div className="flex flex-col gap-3 mx-1">
           <Button
-            onClick={() => handlaBtn("approved")}
+            onClick={() => handlaBtn("accepted")}
             className="flex text-green-600 rounded-md hover:text-green-600  bg-green-500/20  border border-green-700 hover:bg-green-600/10 hover:rounded-lg transition-all duration-300 ease-in-out hover:-translate-x-1 w-25  py-5 px-2"
           >
             <PersonPlus></PersonPlus>
