@@ -116,7 +116,7 @@ const StartupDetaills = async ({ data, opportunityData = [] }) => {
           {/* 📦 Roles Grid Matrix Layout */}
           {opportunityData.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {opportunityData.map(async (role) => {
+              {opportunityData.map((role) => {
                 console.log(role._id);
 
                 return (

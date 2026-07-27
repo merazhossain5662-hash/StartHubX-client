@@ -33,6 +33,7 @@ const AddOpportunityComponent = ({ startupData }) => {
     });
     data.startupId = startupData?._id;
     data.Skills = data?.Skills.split(",");
+    data.industry = startupData?.state;
     console.log("Form Data:", data);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URI}/api/opportunity`,
