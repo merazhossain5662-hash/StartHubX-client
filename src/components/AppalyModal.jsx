@@ -24,19 +24,22 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isApplaid, setIsApplaid] = useState(null);
 
-  if (user) {
-    useEffect(() => {
-      const fetchData = async () => {
+  useEffect(() => {
+    if (!user || !opportunityData?._id) return;
+
+    const fetchData = async () => {
+      try {
         const applicationRes = await fetch(
           `${process.env.NEXT_PUBLIC_URI}/api/application/${user.email}/${opportunityData._id}`,
         );
         const applaidApplication = await applicationRes.json();
-        console.log(applaidApplication);
         setIsApplaid(applaidApplication);
-      };
-      fetchData();
-    }, [setIsApplaid, opportunityData, user]);
-  }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, [opportunityData?._id, user]);
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
