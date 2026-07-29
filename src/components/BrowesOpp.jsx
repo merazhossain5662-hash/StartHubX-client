@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-
 import { Chip } from "@heroui/react";
-
 import { Globe, Clock, Calendar, Magnifier } from "@gravity-ui/icons";
-
 import getDateStatus from "@/lib/actions/getDateStatus";
 import { useRouter } from "next/navigation";
+import PaginationBar from "./PaginationBar"; // Import the pagination component
 
 const WORK_TYPES = ["Remote", "Onsite", "Hybrid"];
 
@@ -20,7 +18,7 @@ const parseParamArray = (param) => {
 const BrowesOpp = ({ oppData = [], searchQ }) => {
   const router = useRouter();
 
-  // 1. Properly initialize state from searchParams
+  // Initialize state from searchParams
   const [searchTerm, setSearchTerm] = useState(searchQ?.search || "");
   const [selectedWorkTypes, setSelectedWorkTypes] = useState(() =>
     parseParamArray(searchQ?.workType),
@@ -29,111 +27,133 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
     parseParamArray(searchQ?.industry),
   );
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(Number(searchQ?.page) || 1);
+  const [itemsPerPage, setItemsPerPage] = useState(Number(searchQ?.limit) || 6);
+
+  // Filter change wrapper to reset pagination to page 1
+  const handleFilterChange = (setter, value) => {
+    setter(value);
+    setCurrentPage(1);
+  };
+
+  // Sync state with URL search parameters
   useEffect(() => {
     const sp = new URLSearchParams();
-    if (searchTerm) {
-      sp.set("search", searchTerm);
-    }
+    if (searchTerm) sp.set("search", searchTerm);
     if (selectedWorkTypes.length > 0) {
-      if (typeof selectedWorkTypes !== "string") {
-        sp.set("workType", selectedWorkTypes.join(","));
-      } else {
-        sp.set("workType", selectedWorkTypes);
-      }
+      sp.set(
+        "workType",
+        Array.isArray(selectedWorkTypes)
+          ? selectedWorkTypes.join(",")
+          : selectedWorkTypes,
+      );
     }
     if (selectedIndustries.length > 0) {
-      if (typeof selectedIndustries !== "string") {
-        sp.set("industry", selectedIndustries.join(","));
-      } else {
-        sp.set("industry", selectedIndustries);
-      }
+      sp.set(
+        "industry",
+        Array.isArray(selectedIndustries)
+          ? selectedIndustries.join(",")
+          : selectedIndustries,
+      );
     }
+    if (currentPage > 1) sp.set("page", String(currentPage));
+    if (itemsPerPage !== 6) sp.set("limit", String(itemsPerPage));
+
     const path = `?${sp.toString()}`;
-    router.push(path);
-  }, [searchTerm, selectedWorkTypes, selectedIndustries, router]);
+    router.push(path, { scroll: false });
+  }, [
+    searchTerm,
+    selectedWorkTypes,
+    selectedIndustries,
+    currentPage,
+    itemsPerPage,
+    router,
+  ]);
 
   const INDUSTRIES = useMemo(() => {
     const extracted = Array.from(
       new Set(oppData.map((item) => item?.industry).filter(Boolean)),
     );
-
     return extracted.length > 0 ? extracted : [];
   }, [oppData]);
 
   // Toggle helper for checkbox selections
-
   const toggleSelection = (item, list, setList) => {
-    if (list.includes(item)) {
-      setList(list.filter((i) => i !== item));
-    } else {
-      setList([...list, item]);
-    }
+    const updatedList = list.includes(item)
+      ? list.filter((i) => i !== item)
+      : [...list, item];
+    handleFilterChange(setList, updatedList);
   };
+
   // Clear all filters handler
   const handleClearFilters = () => {
     setSearchTerm("");
     setSelectedWorkTypes([]);
     setSelectedIndustries([]);
+    setCurrentPage(1);
   };
 
-  // Check if any filter is active
   const hasActiveFilters = Boolean(
     searchTerm.trim() ||
     selectedWorkTypes.length > 0 ||
     selectedIndustries.length > 0,
   );
 
+  // Pagination Calculations
+  const totalItems = oppData.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+  // Slice opportunities for current page slice
+  const currentOppData = useMemo(() => {
+    return oppData.slice(startIndex, startIndex + itemsPerPage);
+  }, [oppData, startIndex, itemsPerPage]);
+
   return (
     <div className="bg-[#001321] text-white min-h-screen py-10 px-4 sm:px-8 relative overflow-hidden">
-      {/* Background glow spots for glass refraction effect */}
-
+      {/* Background glow spots */}
       <div className="absolute top-10 left-10 w-96 h-96 bg-[#8dd0f2]/10 blur-[120px] rounded-full pointer-events-none" />
-
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-600/10 blur-[140px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         {/* Header Section */}
-
         <div className="space-y-2">
           <h1 className="text-4xl font-bold tracking-tight">
             Browse <span className="text-[#8dd0f2]">Opportunities</span>
           </h1>
-
           <p className="text-sm text-gray-400">
-            {oppData.length} opportunities available · Find your perfect startup
+            {totalItems} opportunities available · Find your perfect startup
             role
           </p>
         </div>
 
         {/* Main Layout Grid */}
-
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
           {/* Glassy Sidebar Filters */}
-
           <aside className="bg-[#0f172a]/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 space-y-6 shadow-xl lg:sticky lg:top-6">
             <h2 className="text-lg font-semibold text-gray-200">Filters</h2>
 
             {/* Glass Search Input */}
-
             <div className="relative">
               <Magnifier className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-
               <input
                 type="text"
                 placeholder="Search roles, skills..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange(setSearchTerm, e.target.value)
+                }
                 className="w-full pl-9 pr-4 py-2 bg-[#001321]/50 backdrop-blur-sm border border-white/10 rounded-xl text-sm text-gray-200 focus:outline-none focus:border-[#8dd0f2]/80 transition placeholder:text-gray-500 shadow-inner"
               />
             </div>
 
             {/* Work Type Checkboxes */}
-
             <div className="space-y-3">
               <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Work Type
               </h3>
-
               <div className="space-y-2">
                 {WORK_TYPES.map((type) => (
                   <label
@@ -146,15 +166,12 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
                       onChange={() =>
                         toggleSelection(
                           type,
-
                           selectedWorkTypes,
-
                           setSelectedWorkTypes,
                         )
                       }
                       className="rounded bg-[#001321]/60 border-gray-700 text-[#8dd0f2] focus:ring-[#8dd0f2]/50 accent-[#8dd0f2] size-4 cursor-pointer"
                     />
-
                     {type}
                   </label>
                 ))}
@@ -162,12 +179,10 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
             </div>
 
             {/* Dynamic Industry Checkboxes */}
-
             <div className="space-y-3 pt-2 border-t border-white/5">
               <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Industry
               </h3>
-
               <div className="space-y-2">
                 {INDUSTRIES.map((industry) => (
                   <label
@@ -180,20 +195,18 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
                       onChange={() =>
                         toggleSelection(
                           industry,
-
                           selectedIndustries,
-
                           setSelectedIndustries,
                         )
                       }
                       className="rounded bg-[#001321]/60 border-gray-700 text-[#8dd0f2] focus:ring-[#8dd0f2]/50 accent-[#8dd0f2] size-4 cursor-pointer"
                     />
-
                     {industry}
                   </label>
                 ))}
               </div>
             </div>
+
             {hasActiveFilters && (
               <button
                 onClick={handleClearFilters}
@@ -204,12 +217,11 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
             )}
           </aside>
 
-          {/* Cards Display Grid */}
-
-          <main className="lg:col-span-3">
-            {oppData.length > 0 ? (
+          {/* Cards Display Grid & Pagination */}
+          <main className="lg:col-span-3 space-y-6">
+            {currentOppData.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {oppData.map((role) => {
+                {currentOppData.map((role) => {
                   const expDate = getDateStatus(role.date);
 
                   return (
@@ -259,7 +271,6 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
                         <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-400">
                           <div className="flex items-center gap-1">
                             <Globe size={14} className="text-gray-500" />
-
                             <span className="capitalize">
                               {role.state?.toLowerCase()}
                             </span>
@@ -267,7 +278,6 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
 
                           <div className="flex items-center gap-1">
                             <Clock size={14} className="text-gray-500" />
-
                             <span className="capitalize">
                               {role.CommitmentLevel?.toLowerCase()}
                             </span>
@@ -275,7 +285,6 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
 
                           <div className="flex items-center gap-1">
                             <Calendar size={14} className="text-gray-500" />
-
                             <span>{role.date}</span>
                           </div>
                         </div>
@@ -300,6 +309,21 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
                 </p>
               </div>
             )}
+
+            {/* Reusable Pagination Component */}
+            <PaginationBar
+              currentPage={currentPage}
+              totalPages={10}
+              totalItems={totalItems}
+              startIndex={startIndex}
+              endIndex={endIndex}
+              itemsPerPage={itemsPerPage}
+              onPageChange={(page) => setCurrentPage(page)}
+              onPageSizeChange={(size) => {
+                setItemsPerPage(size);
+                setCurrentPage(1);
+              }}
+            />
           </main>
         </div>
       </div>
