@@ -55,7 +55,7 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
     data.startupId = StartupData._id;
     data.status = "pending";
     data.isOrphan = false;
-    await fetch(`${process.env.NEXT_PUBLIC_URI}/api/application`, {
+    await fetch(`${process.env.NEXT_PUBLIC_URI}api/application`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
