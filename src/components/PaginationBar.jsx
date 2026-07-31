@@ -4,10 +4,10 @@ import React from "react";
 import { Pagination, Dropdown, Button, Label } from "@heroui/react";
 
 const PAGE_SIZE_OPTIONS = [
-  { label: "6", value: "6" },
+  { label: "8", value: "8" },
+  { label: "10", value: "10" },
   { label: "12", value: "12" },
-  { label: "24", value: "24" },
-  { label: "48", value: "48" },
+  { label: "14", value: "14" },
 ];
 
 const PaginationBar = ({

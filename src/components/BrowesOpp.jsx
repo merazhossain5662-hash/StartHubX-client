@@ -28,7 +28,9 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
   );
 
   const [currentPage, setCurrentPage] = useState(Number(searchQ?.page) || 1);
-  const [itemsPerPage, setItemsPerPage] = useState(Number(searchQ?.limit) || 6);
+  const [itemsPerPage, setItemsPerPage] = useState(
+    Number(searchQ?.perPage) || 8,
+  );
 
   const handleFilterChange = (setter, value) => {
     setter(value);
@@ -310,7 +312,7 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
             {/* Reusable Pagination Component */}
             <PaginationBar
               currentPage={currentPage}
-              totalPages={10}
+              totalPages={totalPages}
               totalItems={totalItems}
               startIndex={startIndex}
               endIndex={endIndex}
