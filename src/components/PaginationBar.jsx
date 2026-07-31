@@ -52,6 +52,50 @@ const PaginationBar = ({
         }}
       />
 
+      {/* Navigation Controls */}
+
+      <Pagination.Content className="flex items-center gap-1">
+        <Pagination.Item>
+          <Pagination.Previous
+            isDisabled={currentPage === 1}
+            onPress={() => onPageChange(currentPage - 1)}
+            className="bg-[#001321]/60 text-gray-300 border border-white/10 hover:bg-[#8dd0f2]/20 text-xs px-2.5 py-1 rounded-lg transition disabled:opacity-40"
+          >
+            <Pagination.PreviousIcon />
+
+            <span>Previous</span>
+          </Pagination.Previous>
+        </Pagination.Item>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <Pagination.Item key={page}>
+            <Pagination.Link
+              isActive={page === currentPage}
+              onPress={() => onPageChange(page)}
+              className={`text-xs px-3 py-1 rounded-lg border transition ${
+                page === currentPage
+                  ? "bg-[#8dd0f2] text-[#001321] font-bold border-[#8dd0f2]"
+                  : "bg-[#001321]/60 text-gray-300 border-white/10 hover:bg-[#8dd0f2]/20"
+              }`}
+            >
+              {page}
+            </Pagination.Link>
+          </Pagination.Item>
+        ))}
+
+        <Pagination.Item>
+          <Pagination.Next
+            isDisabled={currentPage === totalPages}
+            onPress={() => onPageChange(currentPage + 1)}
+            className="bg-[#001321]/60 text-gray-300 border border-white/10 hover:bg-[#8dd0f2]/20 text-xs px-2.5 py-1 rounded-lg transition disabled:opacity-40"
+          >
+            <span>Next</span>
+
+            <Pagination.NextIcon />
+          </Pagination.Next>
+        </Pagination.Item>
+      </Pagination.Content>
+
       {/* 3. HeroUI Compound Dropdown */}
       <div className="flex items-center gap-2 shrink-0">
         <span className="text-xs text-gray-400">Rows per page:</span>
