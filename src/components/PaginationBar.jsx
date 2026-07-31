@@ -23,7 +23,7 @@ const PaginationBar = ({
   if (totalItems === 0) return null;
 
   return (
-    <div className="bg-[#0f172a]/40 backdrop-blur-md border border-white/10 rounded-2xl p-4 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div className="bg-[#0f172a]/50 backdrop-blur-md border border-white/10 rounded-2xl p-4 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
       {/* 1. Summary */}
       <div className="text-xs text-gray-400 font-normal shrink-0">
         Showing{" "}
