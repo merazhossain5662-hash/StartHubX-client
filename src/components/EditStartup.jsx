@@ -116,7 +116,7 @@ const EditStartup = ({ startupData }) => {
 
       if (!res.ok) throw new Error(data?.message || "Update failed");
 
-      if (close) close(); // Close HeroUI modal on success
+      if (close) close();
       router.refresh();
     } catch (err) {
       console.error("UPDATE ERROR:", err);

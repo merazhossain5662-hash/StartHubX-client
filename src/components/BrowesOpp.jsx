@@ -27,11 +27,9 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
     parseParamArray(searchQ?.industry),
   );
 
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(Number(searchQ?.page) || 1);
   const [itemsPerPage, setItemsPerPage] = useState(Number(searchQ?.limit) || 6);
 
-  // Filter change wrapper to reset pagination to page 1
   const handleFilterChange = (setter, value) => {
     setter(value);
     setCurrentPage(1);
@@ -100,7 +98,6 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
     selectedIndustries.length > 0,
   );
 
-  // Pagination Calculations
   const totalItems = oppData.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;

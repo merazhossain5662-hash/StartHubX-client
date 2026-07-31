@@ -75,7 +75,6 @@ const PaginationBar = ({
           </Pagination.Item>
         </Pagination.Content>
 
-        {/* Rows Per Page Dropdown using ListBox */}
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-400">Rows per page:</span>
           <Select
