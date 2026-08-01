@@ -5,15 +5,21 @@ const OpportunitiesPage = async ({ searchParams }) => {
   const searchQ = await searchParams;
   const urlSearchQ = new URLSearchParams(searchQ);
   const searcString = urlSearchQ.toString();
+  if (!urlSearchQ.has("page")) {
+    urlSearchQ.set("page", "1");
+  }
   console.log(searcString);
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/opportunity?${searcString}`,
   );
-  const { opportunities, totalCount } = await res.json();
+  const data = await res.json();
 
+  const rawOpportunities = Array.isArray(data)
+    ? data
+    : data?.positions || data?.opportunities || [];
   const oppData = await Promise.all(
-    opportunities.map(async (opp) => {
+    rawOpportunities.map(async (opp) => {
       const startupres = await fetch(
         `${process.env.NEXT_PUBLIC_URI}/api/startups/${opp?.startupId}`,
       );
