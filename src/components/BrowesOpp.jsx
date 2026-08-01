@@ -218,9 +218,9 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
 
           {/* Cards Display Grid & Pagination */}
           <main className="lg:col-span-3 space-y-6">
-            {currentOppData.length > 0 ? (
+            {oppData.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {currentOppData.map((role) => {
+                {oppData.map((role) => {
                   const expDate = getDateStatus(role.date);
 
                   return (
