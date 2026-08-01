@@ -105,10 +105,10 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
 
-  // Slice opportunities for current page slice
-  const currentOppData = useMemo(() => {
-    return oppData.slice(startIndex, startIndex + itemsPerPage);
-  }, [oppData, startIndex, itemsPerPage]);
+  // // Slice opportunities for current page slice
+  // const currentOppData = useMemo(() => {
+  //   return oppData.slice(startIndex, startIndex + itemsPerPage);
+  // }, [oppData, startIndex, itemsPerPage]);
 
   return (
     <div className="bg-[#001321] text-white min-h-screen py-10 px-4 sm:px-8 relative overflow-hidden">
