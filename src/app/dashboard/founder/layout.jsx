@@ -12,9 +12,10 @@ const layout = async ({ children }) => {
     redirect("/login");
   }
 
-  if (session?.user?.role.toLowerCase() !== "founder") {
+  if (session?.user?.role?.toLowerCase() !== "founder") {
     redirect("/unauthorized");
   }
+  console.log(session?.user?.role);
 
   return <div>{children}</div>;
 };

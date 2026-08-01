@@ -12,7 +12,7 @@ const layout = async ({ children }) => {
     redirect("/login");
   }
 
-  if (session?.user?.role.toLowerCase() !== "collaborator") {
+  if (session?.user?.role?.toLowerCase() !== "collaborator") {
     redirect("/unauthorized");
   }
 
