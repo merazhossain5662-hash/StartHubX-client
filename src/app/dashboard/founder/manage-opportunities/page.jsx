@@ -14,7 +14,7 @@ const manageOpportunities = async () => {
   const startupData = await res.json();
   const startupId = startupData[0]?._id;
   const opportunityRes = await fetch(
-    `${process.env.NEXT_PUBLIC_URI}/api/opportunitise/${startupId}`,
+    `${process.env.NEXT_PUBLIC_URI}/api/opportunities/${startupId}`,
   );
   const opportunityData = await opportunityRes.json();
   return (

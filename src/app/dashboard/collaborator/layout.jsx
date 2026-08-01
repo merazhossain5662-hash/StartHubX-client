@@ -15,7 +15,7 @@ const layout = async ({ children }) => {
   if (session?.user?.role.toLowerCase() !== "collaborator") {
     redirect("/unauthorized");
   }
-  console.log(session?.user?.role.toLowerCase());
+
   return <div>{children}</div>;
 };
 
