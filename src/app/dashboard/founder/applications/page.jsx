@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import React from "react";
 
 const applicationPage = async () => {
-  const { user, isPending } = await auth.api.getSession({
+  const { user } = await auth.api.getSession({
     headers: await headers(), // some endpoints might require headers
   });
   const res = await fetch(
