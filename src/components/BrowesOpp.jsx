@@ -58,7 +58,7 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
       );
     }
     if (currentPage > 1) sp.set("page", String(currentPage));
-    if (itemsPerPage !== 6) sp.set("limit", String(itemsPerPage));
+    if (itemsPerPage !== 6) sp.set("perPage", String(itemsPerPage));
 
     const path = `?${sp.toString()}`;
     router.push(path, { scroll: false });
