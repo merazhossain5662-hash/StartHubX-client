@@ -17,7 +17,7 @@ const layout = async ({ children }) => {
   }
   console.log(session?.user?.role);
 
-  return <div>{children}</div>;
+  return <div>Founder Layout Working!</div>;
 };
 
 export default layout;
