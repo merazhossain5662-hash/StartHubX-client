@@ -7,10 +7,10 @@ const LatestOpp = async () => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/opportunity?limit=6`,
   );
-  const datas = await res.json();
+  const { opportunities } = await res.json();
 
   const Openings = await Promise.all(
-    datas.map(async (opp) => {
+    opportunities.map(async (opp) => {
       const startupres = await fetch(
         `${process.env.NEXT_PUBLIC_URI}/api/startups/${opp?.startupId}`,
       );
