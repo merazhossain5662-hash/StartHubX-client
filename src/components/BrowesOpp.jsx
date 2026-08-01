@@ -15,7 +15,7 @@ const parseParamArray = (param) => {
   return param.split(",").filter(Boolean);
 };
 
-const BrowesOpp = ({ oppData = [], searchQ }) => {
+const BrowesOpp = ({ oppData = [], searchQ, totalCount }) => {
   const router = useRouter();
 
   // Initialize state from searchParams
@@ -100,7 +100,7 @@ const BrowesOpp = ({ oppData = [], searchQ }) => {
     selectedIndustries.length > 0,
   );
 
-  const totalItems = oppData?.at(-1)?.totalCount || oppData.length;
+  const totalItems = totalCount || oppData.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);

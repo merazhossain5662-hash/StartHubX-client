@@ -10,10 +10,10 @@ const OpportunitiesPage = async ({ searchParams }) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/opportunity?${searcString}`,
   );
-  const datas = await res.json();
+  const { opportunities, totalCount } = await res.json();
 
   const oppData = await Promise.all(
-    datas.map(async (opp) => {
+    opportunities.map(async (opp) => {
       const startupres = await fetch(
         `${process.env.NEXT_PUBLIC_URI}/api/startups/${opp?.startupId}`,
       );
@@ -28,7 +28,11 @@ const OpportunitiesPage = async ({ searchParams }) => {
   );
   return (
     <div>
-      <BrowesOpp searchQ={searchQ} oppData={oppData}></BrowesOpp>
+      <BrowesOpp
+        searchQ={searchQ}
+        oppData={oppData}
+        totalCount={totalCount}
+      ></BrowesOpp>
     </div>
   );
 };
