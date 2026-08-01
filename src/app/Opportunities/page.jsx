@@ -26,6 +26,7 @@ const OpportunitiesPage = async ({ searchParams }) => {
       };
     }),
   );
+  // console.log(oppData);
   return (
     <div>
       <BrowesOpp
