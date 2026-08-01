@@ -1,6 +1,7 @@
 import BrowesOpp from "@/components/BrowesOpp";
 import React from "react";
 
+export const dynamic = "force-dynamic";
 const OpportunitiesPage = async ({ searchParams }) => {
   const searchQ = await searchParams;
   const urlSearchQ = new URLSearchParams(searchQ);
