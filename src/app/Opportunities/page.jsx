@@ -18,6 +18,7 @@ const OpportunitiesPage = async ({ searchParams }) => {
   const rawOpportunities = Array.isArray(data)
     ? data
     : data?.positions || data?.opportunities || [];
+  const totalCount = data?.totalCount || rawOpportunities.length;
   const oppData = await Promise.all(
     rawOpportunities.map(async (opp) => {
       const startupres = await fetch(
