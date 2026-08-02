@@ -16,11 +16,11 @@ const manageOpportunities = async () => {
   const opportunityRes = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/opportunities/${startupId}`,
   );
-  const opportunityData = await opportunityRes.json();
+  const { opportunities } = await opportunityRes.json();
   return (
     <div>
       <ManageOpportunityComponent
-        opportunityData={opportunityData || []}
+        opportunityData={opportunities || []}
         startupData={startupData[0] || null}
       />
     </div>
