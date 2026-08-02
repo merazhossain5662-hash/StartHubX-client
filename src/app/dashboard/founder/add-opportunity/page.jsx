@@ -22,6 +22,7 @@ const AddOpportunityPage = async () => {
       <AddOpportunityComponent
         startupData={startupData[0] || null}
         totalCount={totalCount}
+        userPlan={session?.user?.plan || "free"}
       />
     </div>
   );

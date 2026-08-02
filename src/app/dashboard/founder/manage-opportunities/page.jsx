@@ -23,7 +23,6 @@ const manageOpportunities = async () => {
       <ManageOpportunityComponent
         opportunityData={opportunities || []}
         startupData={startupData[0] || null}
-        userPlan={session?.user?.plan || "free"}
       />
     </div>
   );
