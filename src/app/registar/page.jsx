@@ -103,6 +103,7 @@ const RegisterPage = () => {
       password: data.password, // required
       image: data.profileImage,
       role: data.role,
+      plan: "free",
       callbackURL: "/login",
     });
 
