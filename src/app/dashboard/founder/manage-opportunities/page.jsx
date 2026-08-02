@@ -8,6 +8,7 @@ const manageOpportunities = async () => {
   const session = await auth.api.getSession({
     headers: await headers(), // some endpoints might require headers
   });
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/startup/${session?.user?.email}`,
   );
@@ -22,6 +23,7 @@ const manageOpportunities = async () => {
       <ManageOpportunityComponent
         opportunityData={opportunities || []}
         startupData={startupData[0] || null}
+        userPlan={session?.user?.plan || "free"}
       />
     </div>
   );
