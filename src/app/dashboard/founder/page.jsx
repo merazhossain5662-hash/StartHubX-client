@@ -20,7 +20,7 @@ const founderPage = async () => {
   const activeApplications =
     applicationsData?.filter((app) => !app?.isOrphan) || [];
   const opportunityRes = await fetch(
-    `${process.env.NEXT_PUBLIC_URI}/api/opportunitise/${startupId}`,
+    `${process.env.NEXT_PUBLIC_URI}/api/opportunities/${startupId}`,
   );
   const opportunityData = await opportunityRes.json();
   if (isPending) {
