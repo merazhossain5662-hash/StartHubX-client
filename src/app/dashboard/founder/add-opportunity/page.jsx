@@ -12,9 +12,17 @@ const AddOpportunityPage = async () => {
     `${process.env.NEXT_PUBLIC_URI}/api/startup/${session?.user?.email}`,
   );
   const startupData = await res.json();
+  const startupId = startupData[0]?._id;
+  const opportunityRes = await fetch(
+    `${process.env.NEXT_PUBLIC_URI}/api/opportunities/${startupId}`,
+  );
+  const { totalCount } = await opportunityRes.json();
   return (
     <div>
-      <AddOpportunityComponent startupData={startupData[0] || null} />
+      <AddOpportunityComponent
+        startupData={startupData[0] || null}
+        totalCount={totalCount}
+      />
     </div>
   );
 };

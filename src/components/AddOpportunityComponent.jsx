@@ -15,7 +15,8 @@ import {
 import { Date } from "@/components/Date";
 import { redirect, useRouter } from "next/navigation";
 
-const AddOpportunityComponent = ({ startupData }) => {
+const AddOpportunityComponent = ({ startupData, totalCount }) => {
+  console.log("Total Count:", totalCount);
   const router = useRouter();
   const [value, setValue] = useState(null);
   const currentDate = today(getLocalTimeZone());
