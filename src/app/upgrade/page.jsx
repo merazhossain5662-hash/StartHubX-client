@@ -13,7 +13,7 @@ const PremiumPricingCard = () => {
   ];
 
   return (
-    <div className="w-full max-w-md mx-auto rounded-3xl border border-[#224764] bg-gray-900/80 backdrop-blur-md overflow-hidden shadow-2xl shadow-[#022b3f]/50">
+    <div className="w-full min-h-screen max-w-md mx-auto rounded-3xl border border-[#224764] bg-gray-900/80 backdrop-blur-md overflow-hidden shadow-2xl shadow-[#022b3f]/50">
       {/* TOP SECTION */}
       <div className="p-8 bg-gradient-to-b from-[#162e43] to-[#0f1f2e] border-b border-[#224764]">
         <div className="flex items-center gap-2 mb-2">
