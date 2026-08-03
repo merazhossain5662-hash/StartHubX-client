@@ -10,7 +10,7 @@ import {
   DatePicker,
   Select,
   ListBox,
-  Progress,
+  ProgressBar,
 } from "@heroui/react";
 
 import { Date } from "@/components/Date";
@@ -66,18 +66,23 @@ const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
             {/* HEADER */}
             {isFreePlan && (
               <div className="mb-6 space-y-2">
-                <Progress
-                  label="Free Plan Usage"
-                  size="sm"
+                <ProgressBar
                   value={totalCount}
                   maxValue={FREE_LIMIT}
-                  color={isLimitReached ? "danger" : "primary"}
-                  showValueLabel={true}
-                  valueLabel={`${totalCount} / ${FREE_LIMIT} Opportunities Used`}
-                  className="max-w-md"
-                />
+                  color={isLimitReached ? "danger" : "accent"}
+                  className="w-full"
+                >
+                  <div className="flex justify-between text-xs text-gray-400 mb-1">
+                    <Label>Free Opportunities Used</Label>
+                    <ProgressBar.Output />
+                  </div>
+                  <ProgressBar.Track className="bg-gray-800 rounded-full h-2">
+                    <ProgressBar.Fill />
+                  </ProgressBar.Track>
+                </ProgressBar>
+
                 {isLimitReached && (
-                  <p className="text-xs text-red-400 mt-1">
+                  <p className="text-xs text-red-400 mt-2">
                     You have reached your limit of {FREE_LIMIT} free
                     opportunities. Please upgrade your plan to post more.
                   </p>
