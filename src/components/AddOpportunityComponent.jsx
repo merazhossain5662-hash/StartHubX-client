@@ -99,7 +99,7 @@ const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
                 post unlimited opportunities.
               </p>
               <Link
-                href="/dashboard/founder/upgrade"
+                href="/upgrade"
                 className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-2.5 text-xs font-semibold text-black hover:opacity-90 transition"
               >
                 Upgrade — $29.99
