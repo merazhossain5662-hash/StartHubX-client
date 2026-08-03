@@ -61,35 +61,57 @@ const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
       </p>
       {startupData ? (
         <div>
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold text-white">
+              Add Opportunity
+            </h1>
+            <p className="text-xs md:text-sm text-gray-400">
+              Post a role for your startup.{" "}
+              {isFreePlan && (
+                <span className="text-amber-400 font-medium">
+                  ({totalCount}/{FREE_LIMIT} free slots used)
+                </span>
+              )}
+            </p>
+          </div>
+          {isFreePlan && (
+            <ProgressBar
+              value={totalCount}
+              minValue={0}
+              maxValue={FREE_LIMIT}
+              valueLabel={`${totalCount}/${FREE_LIMIT}`} // Shows "3/3" instead of percentage
+              color={isLimitReached ? "danger" : "accent"}
+              className="w-full space-y-1.5"
+            >
+              <div className="flex justify-between text-xs text-gray-400">
+                <Label>Free Opportunity Limit</Label>
+                <ProgressBar.Output /> {/* Renders valueLabel: e.g. "3/3" */}
+              </div>
+              <ProgressBar.Track className="bg-gray-800 rounded-full h-2 w-full">
+                <ProgressBar.Fill />
+              </ProgressBar.Track>
+            </ProgressBar>
+          )}
+          {isLimitReached && (
+            <div className="rounded-2xl border border-amber-600/40 bg-amber-950/20 p-5 space-y-3">
+              <div className="flex items-center gap-2 text-amber-500 font-semibold text-sm">
+                <span>⚡</span>
+                <h2>Premium Required</h2>
+              </div>
+              <p className="text-xs text-gray-300">
+                You've used all {FREE_LIMIT} free opportunity slots. Upgrade to
+                post unlimited opportunities.
+              </p>
+              <Link
+                href="/dashboard/founder/upgrade"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-2.5 text-xs font-semibold text-black hover:opacity-90 transition"
+              >
+                Upgrade — $29.99
+              </Link>
+            </div>
+          )}
           {/* Add your startup profile content here */}
           <div className="w-full md:max-w-xl max-w-md rounded-3xl border border-gray-800 shadow-md shadow-[#022b3f]/70 bg-transparent p-7 backdrop-grayscale-25 hover:backdrop-brightness-110 ">
-            {/* HEADER */}
-            {isFreePlan && (
-              <div className="mb-6 space-y-2">
-                <ProgressBar
-                  value={totalCount}
-                  maxValue={FREE_LIMIT}
-                  color={isLimitReached ? "danger" : "accent"}
-                  className="w-full"
-                >
-                  <div className="flex justify-between text-xs text-gray-400 mb-1">
-                    <Label>Free Opportunities Used</Label>
-                    <ProgressBar.Output />
-                  </div>
-                  <ProgressBar.Track className="bg-gray-800 rounded-full h-2">
-                    <ProgressBar.Fill />
-                  </ProgressBar.Track>
-                </ProgressBar>
-
-                {isLimitReached && (
-                  <p className="text-xs text-red-400 mt-2">
-                    You have reached your limit of {FREE_LIMIT} free
-                    opportunities. Please upgrade your plan to post more.
-                  </p>
-                )}
-              </div>
-            )}
-
             <Form onSubmit={onSubmit} className="space-y-5 ">
               <div className="flex flex-col">
                 <Label className="text-xs text-gray-400">Role Title</Label>
