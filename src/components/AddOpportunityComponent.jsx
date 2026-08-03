@@ -55,10 +55,6 @@ const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
   };
   return (
     <div>
-      <h1 className="text-lg md:text-2xl ">My Startup</h1>
-      <p className="text-xs md:text-sm text-gray-500">
-        Create and manage your startup profile.
-      </p>
       {startupData ? (
         <div className="w-full max-w-xl space-y-6">
           <div>
@@ -245,9 +241,10 @@ const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
               {/* SUBMIT */}
               <Button
                 type="submit"
-                className="w-full rounded-xl py-5 text-sm font-medium bg-linear-to-r from-[#2a587b] via-[#437fac] to-[#6bc8f6] hover:opacity-90 transition"
+                isDisabled={isLimitReached}
+                className="w-full rounded-xl py-5 text-sm font-medium bg-gradient-to-r from-[#2a587b] via-[#437fac] to-[#6bc8f6] hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Post Opportunity
+                {isLimitReached ? "Limit Reached" : "Post Opportunity"}
               </Button>
             </Form>
           </div>
