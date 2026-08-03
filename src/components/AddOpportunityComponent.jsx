@@ -60,7 +60,7 @@ const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
         Create and manage your startup profile.
       </p>
       {startupData ? (
-        <div>
+        <div className="w-full max-w-xl space-y-6">
           <div>
             <h1 className="text-xl md:text-2xl font-bold text-white">
               Add Opportunity
