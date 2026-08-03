@@ -1,0 +1,31 @@
+import { NextResponse } from "next/server";
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export async function POST(req) {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      ui_mode: "embedded_page",
+      mode: "payment",
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "StartupForge Premium (Lifetime)",
+              description:
+                "Post unlimited opportunities and build your dream team.",
+            },
+            unit_amount: 2999, // $29.99 in cents
+          },
+          quantity: 1,
+        },
+      ],
+      return_url: `${req.headers.get("origin")}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+    });
+
+    return NextResponse.json({ clientSecret: session.client_secret });
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
