@@ -20,13 +20,11 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-[#070d14] text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Glow Elements */}
+      {/* Glow Effects */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-[300px] h-[300px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Glass Card Container */}
       <div className="w-full max-w-3xl z-10 space-y-6">
-        {/* Header Badge */}
         <div className="text-center space-y-2">
           <span className="text-amber-400 text-xs font-semibold px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 backdrop-blur-md inline-block">
             ⚡ Secure Payment
@@ -39,7 +37,6 @@ export default function CheckoutPage() {
           </p>
         </div>
 
-        {/* Embedded Form Wrapper with Glass Effect */}
         <div className="w-full rounded-3xl border border-[#224764]/60 bg-gray-900/40 backdrop-blur-xl p-6 shadow-2xl shadow-[#022b3f]/40 hover:border-[#8dd0f2]/40 transition-all duration-300">
           <EmbeddedCheckoutProvider
             stripe={stripePromise}
@@ -49,7 +46,6 @@ export default function CheckoutPage() {
           </EmbeddedCheckoutProvider>
         </div>
 
-        {/* Footer Guarantee */}
         <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
           <svg
             className="w-4 h-4 text-emerald-400"

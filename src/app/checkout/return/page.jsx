@@ -5,13 +5,12 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 function ReturnContent() {
-  const [status, setStatus] = (useState < string) | (null > null);
+  const [status, setStatus] = useState(null);
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
     if (sessionId) {
-      // Fetch session status if needed, or validate payment state
       setStatus("complete");
     }
   }, [sessionId]);
