@@ -10,6 +10,7 @@ import {
   DatePicker,
   Select,
   ListBox,
+  Progress,
 } from "@heroui/react";
 
 import { Date } from "@/components/Date";
@@ -18,6 +19,9 @@ import { redirect, useRouter } from "next/navigation";
 const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
   console.log("Total Count:", totalCount);
   console.log("User Plan:", userPlan);
+  const FREE_LIMIT = 3;
+  const isFreePlan = userPlan === "free" || !userPlan;
+  const isLimitReached = isFreePlan && totalCount >= FREE_LIMIT;
   const router = useRouter();
   const [value, setValue] = useState(null);
   const currentDate = today(getLocalTimeZone());
@@ -60,6 +64,26 @@ const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
           {/* Add your startup profile content here */}
           <div className="w-full md:max-w-xl max-w-md rounded-3xl border border-gray-800 shadow-md shadow-[#022b3f]/70 bg-transparent p-7 backdrop-grayscale-25 hover:backdrop-brightness-110 ">
             {/* HEADER */}
+            {isFreePlan && (
+              <div className="mb-6 space-y-2">
+                <Progress
+                  label="Free Plan Usage"
+                  size="sm"
+                  value={totalCount}
+                  maxValue={FREE_LIMIT}
+                  color={isLimitReached ? "danger" : "primary"}
+                  showValueLabel={true}
+                  valueLabel={`${totalCount} / ${FREE_LIMIT} Opportunities Used`}
+                  className="max-w-md"
+                />
+                {isLimitReached && (
+                  <p className="text-xs text-red-400 mt-1">
+                    You have reached your limit of {FREE_LIMIT} free
+                    opportunities. Please upgrade your plan to post more.
+                  </p>
+                )}
+              </div>
+            )}
 
             <Form onSubmit={onSubmit} className="space-y-5 ">
               <div className="flex flex-col">
