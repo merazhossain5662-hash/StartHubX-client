@@ -14,6 +14,12 @@ const founderPage = async () => {
   );
   const startupData = await res.json();
   const startupId = startupData[0]?._id;
+  const ApplicationsRes = await fetch(
+    `${process.env.NEXT_PUBLIC_URI}/api/applications/${startupId}`,
+  );
+  const applicationsData = await ApplicationsRes.json();
+  const activeApplications =
+    applicationsData?.filter((app) => !app?.isOrphan) || [];
   const opportunityRes = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/opportunities/${startupId}`,
   );
@@ -22,7 +28,7 @@ const founderPage = async () => {
   return (
     <div>
       <h1 className="text-lg md:text-2xl ">
-        Wellcome, <span className="font-bold ml-1">{session?.user?.name}</span>
+        Wellcome, <span className="font-bold ml-1">{user.name}</span>
       </h1>
       <p className="text-xs md:text-sm text-gray-500">
         Here's an overview of your startup activity.
