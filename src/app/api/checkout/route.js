@@ -44,3 +44,31 @@ export async function POST(req) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const sessionId = searchParams.get("session_id");
+
+    if (!sessionId) {
+      return NextResponse.json(
+        { error: "Missing session_id parameter" },
+        { status: 400 },
+      );
+    }
+
+    // Retrieve full session object from Stripe using the session_id
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    return NextResponse.json({
+      status: session.status,
+      paymentStatus: session.payment_status,
+      customerEmail:
+        session.customer_details?.email || session.metadata?.userEmail,
+      metadata: session.metadata,
+    });
+  } catch (err) {
+    console.error("Stripe Session Retrieval Error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}

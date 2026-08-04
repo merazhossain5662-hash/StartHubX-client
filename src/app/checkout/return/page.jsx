@@ -12,7 +12,8 @@ function ReturnContent() {
 
   useEffect(() => {
     if (sessionId) {
-      fetch(`/api/checkout/session?session_id=${sessionId}`)
+      // Calls the GET route we exported above
+      fetch(`/api/checkout?session_id=${sessionId}`)
         .then((res) => res.json())
         .then((data) => {
           setSessionData(data);
@@ -72,7 +73,7 @@ function ReturnContent() {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Content Header */}
         <div className="space-y-2">
           <span className="text-[10px] uppercase tracking-wider font-bold text-emerald-400 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 inline-block">
             Payment Confirmed
