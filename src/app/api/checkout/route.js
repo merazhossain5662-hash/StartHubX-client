@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
+  console.log(req?.body);
+
   try {
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded_page",
@@ -12,11 +15,11 @@ export async function POST(req) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "StartupForge Premium (Lifetime)",
+              name: "StartHub X Premium (Lifetime)",
               description:
                 "Post unlimited opportunities and build your dream team.",
             },
-            unit_amount: 2999, // $29.99 in cents
+            unit_amount: 2999,
           },
           quantity: 1,
         },
