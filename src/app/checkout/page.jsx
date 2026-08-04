@@ -26,7 +26,7 @@ export default function CheckoutPage() {
     });
     const data = await res.json();
     return data.clientSecret;
-  }, []);
+  }, [session?.user?.email, session?.user?.id, session?.user?._id]);
 
   return (
     <div className="min-h-screen bg-[#070d14] text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
