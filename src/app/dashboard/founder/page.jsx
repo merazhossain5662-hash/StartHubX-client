@@ -28,7 +28,7 @@ const founderPage = async () => {
   return (
     <div>
       <h1 className="text-lg md:text-2xl ">
-        Wellcome, <span className="font-bold ml-1">{user.name}</span>
+        Wellcome, <span className="font-bold ml-1">{session?.user?.name}</span>
       </h1>
       <p className="text-xs md:text-sm text-gray-500">
         Here's an overview of your startup activity.
