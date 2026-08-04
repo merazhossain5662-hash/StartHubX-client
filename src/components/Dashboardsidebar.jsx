@@ -64,13 +64,37 @@ export function DashboardSidebar() {
       href: "/Opportunities",
     },
   ];
+  const adminItems = [
+    {
+      icon: ChartColumnStacked,
+      label: "Overview",
+      href: `/dashboard/${session?.user?.role?.toLowerCase()}`,
+    },
+    {
+      icon: PersonGear,
+      label: "Manage Users",
+      href: `/dashboard/${session?.user?.role?.toLowerCase()}/manage-users`,
+    },
+    {
+      icon: Rocket,
+      label: "Manage Startups",
+      href: `/dashboard/${session?.user?.role?.toLowerCase()}/manage-startups`,
+    },
+    {
+      icon: SquareArticle,
+      label: "Transactions",
+      href: `/dashboard/${session?.user?.role?.toLowerCase()}/transactions`,
+    },
+  ];
   useEffect(() => {
     if (session?.user?.role.toLowerCase() === "founder") {
       setDynamicItems(founderItems);
     } else if (session?.user?.role.toLowerCase() === "collaborator") {
       setDynamicItems(collaboretorItems);
+    } else if (session?.user?.role.toLowerCase() === "admin") {
+      setDynamicItems(adminItems);
     }
-  }, [session, founderItems, collaboretorItems, setDynamicItems]);
+  }, [session, founderItems, collaboretorItems, adminItems, setDynamicItems]);
   const pathName = usePathname();
   console.log("pathName", pathName);
   const navContent = (
