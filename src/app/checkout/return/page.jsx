@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -9,6 +9,7 @@ function ReturnContent() {
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
+  const isSubscribedRef = useRef(false);
 
   useEffect(() => {
     if (sessionId) {
@@ -23,10 +24,50 @@ function ReturnContent() {
           console.error("Failed to fetch session:", err);
           setLoading(false);
         });
+      async function handlePaymentVerification() {
+        try {
+          const isPaid =
+            sessionData?.status === "complete" ||
+            sessionData?.paymentStatus === "paid";
+
+          if (isPaid && !isSubscribedRef.current) {
+            isSubscribedRef.current = true; // Guard against duplicate calls
+
+            const userEmail =
+              sessionData?.customerEmail || sessionData?.metadata?.userEmail;
+            const userId = sessionData?.metadata?.userId;
+            const plan = sessionData?.metadata?.plan || "premium";
+
+            // 3. POST to your Express backend route (/api/subscribetion)
+            await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/api/subscribetion`,
+              {
+                // Update URL/port to match your Express server URL
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId,
+                  userEmail,
+                  plan,
+                  sessionId,
+                  paymentStatus: sessionData?.paymentStatus,
+                }),
+              },
+            );
+          }
+        } catch (err) {
+          console.error("Error during return process:", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+      handlePaymentVerification();
     } else {
       setLoading(false);
     }
-  }, [sessionId]);
+  }, [sessionId, isSubscribedRef, sessionData]);
 
   if (loading) {
     return (
