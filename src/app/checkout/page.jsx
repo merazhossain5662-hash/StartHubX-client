@@ -14,14 +14,18 @@ const stripePromise = loadStripe(
 
 export default function CheckoutPage() {
   const { data: session, isPending } = authClient.useSession();
-  console.log(session);
+
   const fetchClientSecret = useCallback(async () => {
+    // Session is guaranteed to be loaded here
+    const userEmail = session?.user?.email;
+    const userId = session?.user?.id || session?.user?._id;
+
     const res = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userEmail: session?.user?.email || "user@example.com", // Replace with actual user email
-        userId: session?.user?.id || session?.user?._id || "user123", // Replace with actual user ID
+        userEmail: userEmail || "",
+        userId: userId || "",
       }),
     });
     const data = await res.json();
@@ -47,13 +51,24 @@ export default function CheckoutPage() {
           </p>
         </div>
 
-        <div className="w-full rounded-3xl border border-[#224764]/60 bg-gray-900/40 backdrop-blur-xl p-6 shadow-2xl shadow-[#022b3f]/40 hover:border-[#8dd0f2]/40 transition-all duration-300">
-          <EmbeddedCheckoutProvider
-            stripe={stripePromise}
-            options={{ fetchClientSecret }}
-          >
-            <EmbeddedCheckout className="w-full min-h-[500px]" />
-          </EmbeddedCheckoutProvider>
+        <div className="w-full rounded-3xl border border-[#224764]/60 bg-gray-900/40 backdrop-blur-xl p-6 shadow-2xl shadow-[#022b3f]/40 hover:border-[#8dd0f2]/40 transition-all duration-300 min-h-[500px] flex items-center justify-center">
+          {/* Prevent checkout from mounting while session is loading */}
+          {isPending ? (
+            <div className="text-center space-y-3">
+              <div className="w-8 h-8 border-4 border-sky-400/20 border-t-sky-400 rounded-full animate-spin mx-auto" />
+              <p className="text-xs text-gray-400 animate-pulse">
+                Preparing secure checkout...
+              </p>
+            </div>
+          ) : (
+            <EmbeddedCheckoutProvider
+              key={session?.user?.email} // Key forces re-initialization with correct user
+              stripe={stripePromise}
+              options={{ fetchClientSecret }}
+            >
+              <EmbeddedCheckout className="w-full min-h-[500px]" />
+            </EmbeddedCheckoutProvider>
+          )}
         </div>
 
         <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
