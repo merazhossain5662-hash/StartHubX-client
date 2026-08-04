@@ -18,14 +18,7 @@ const founderPage = async () => {
     `${process.env.NEXT_PUBLIC_URI}/api/opportunities/${startupId}`,
   );
   const { opportunities } = await opportunityRes.json();
-  if (isPending) {
-    return (
-      <div className="flex items-center gap-4">
-        <Spinner size="lg" className="text-[#8dd0f2]" />
-        <h1>Loading...</h1>
-      </div>
-    );
-  }
+
   return (
     <div>
       <h1 className="text-lg md:text-2xl ">
