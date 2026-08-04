@@ -39,23 +39,20 @@ function ReturnContent() {
             const plan = sessionData?.metadata?.plan || "premium";
 
             // 3. POST to your Express backend route (/api/subscribetion)
-            await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/subscribetion`,
-              {
-                // Update URL/port to match your Express server URL
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  userId,
-                  userEmail,
-                  plan,
-                  sessionId,
-                  paymentStatus: sessionData?.paymentStatus,
-                }),
+            await fetch(`${process.env.NEXT_PUBLIC_URI}/api/subscribetion`, {
+              // Update URL/port to match your Express server URL
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
               },
-            );
+              body: JSON.stringify({
+                userId,
+                userEmail,
+                plan,
+                sessionId,
+                paymentStatus: sessionData?.paymentStatus,
+              }),
+            });
           }
         } catch (err) {
           console.error("Error during return process:", err);
