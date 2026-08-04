@@ -12,7 +12,7 @@ const founderPage = async () => {
     `${process.env.NEXT_PUBLIC_URI}/api/startup/${user?.email}`,
   );
   const startupData = await res.json();
-  const startupId = startupData[0]?._id;
+  const startupId = startupData?._id;
   const ApplicationsRes = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/applications/${startupId}`,
   );
