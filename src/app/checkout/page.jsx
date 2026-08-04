@@ -6,14 +6,24 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
+import { authClient } from "@/lib/auth-client";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
 );
 
 export default function CheckoutPage() {
+  const { data: session, isPending } = authClient.useSession();
+  console.log(session);
   const fetchClientSecret = useCallback(async () => {
-    const res = await fetch("/api/checkout", { method: "POST" });
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userEmail: session?.user?.email || "user@example.com", // Replace with actual user email
+        userId: session?.user?.id || session?.user?._id || "user123", // Replace with actual user ID
+      }),
+    });
     const data = await res.json();
     return data.clientSecret;
   }, []);
