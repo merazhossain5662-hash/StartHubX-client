@@ -1,34 +1,33 @@
 "use server";
-import { auth } from "@/lib/actions/auth";
+
+import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-/**
- * Checks active session statuses for a batch of user IDs.
- * Returns an object mapping userId to boolean (true = active session exists).
- */
 export async function getUsersActiveStatus(userIds) {
   if (!userIds || userIds.length === 0) return {};
 
   const reqHeaders = await headers();
   const statusMap = {};
 
-  // Check sessions for each user concurrently
   await Promise.all(
     userIds.map(async (userId) => {
       try {
+        // Pass query object instead of body
         const sessions = await auth.api.listUserSessions({
-          body: { userId },
+          query: { userId },
           headers: reqHeaders,
         });
 
         const now = new Date();
-        // User is active if at least one session token has not expired
+
+        // Ensure sessions is an array and check active expiration dates
         const hasActiveSession =
           Array.isArray(sessions) &&
           sessions.some((s) => new Date(s.expiresAt) > now);
 
         statusMap[userId] = hasActiveSession;
       } catch (err) {
+        console.error(`Failed to fetch session for ${userId}:`, err);
         statusMap[userId] = false;
       }
     }),
