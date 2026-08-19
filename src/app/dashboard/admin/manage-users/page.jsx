@@ -1,7 +1,12 @@
+import UsersTable from "@/components/UserTable";
 import React from "react";
 
 const manageUsers = async () => {
-  return <div></div>;
+  return (
+    <div>
+      <UsersTable />
+    </div>
+  );
 };
 
 export default manageUsers;

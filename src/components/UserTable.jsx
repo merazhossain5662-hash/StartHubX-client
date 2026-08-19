@@ -11,7 +11,7 @@ import {
   TrashBin,
 } from "@gravity-ui/icons";
 
-export default function ManageUsersTable() {
+export default function UsersTable() {
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
