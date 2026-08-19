@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { Table, Avatar, Chip, Button, Spinner, Select } from "@heroui/react";
+import { Table, Avatar, Chip, Button, Spinner } from "@heroui/react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -11,7 +11,7 @@ import {
   TrashBin,
 } from "@gravity-ui/icons";
 
-export default function UsersTable() {
+export default function ManageUsersTable() {
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -41,14 +41,6 @@ export default function UsersTable() {
   useEffect(() => {
     fetchUsers();
   }, [page]);
-
-  const handleRoleChange = async (userId, newRole) => {
-    await authClient.admin.setRole({
-      userId,
-      role: newRole,
-    });
-    fetchUsers();
-  };
 
   const handleBanToggle = async (user) => {
     if (user.banned) {
@@ -80,19 +72,21 @@ export default function UsersTable() {
             <Table.Header>
               <Table.Column>USER</Table.Column>
               <Table.Column>ROLE</Table.Column>
+              <Table.Column>PLAN</Table.Column>
               <Table.Column>STATUS</Table.Column>
               <Table.Column>ACTIONS</Table.Column>
             </Table.Header>
             <Table.Body>
               {loading ? (
                 <Table.Row>
-                  <Table.Cell colSpan={4} className="text-center py-8">
+                  <Table.Cell colSpan={5} className="text-center py-8">
                     <Spinner size="md" />
                   </Table.Cell>
                 </Table.Row>
               ) : (
                 users.map((user) => (
                   <Table.Row key={user.id}>
+                    {/* User Info */}
                     <Table.Cell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
@@ -112,22 +106,29 @@ export default function UsersTable() {
                       </div>
                     </Table.Cell>
 
+                    {/* Role Display */}
                     <Table.Cell>
-                      <Select
+                      <Chip
                         size="sm"
-                        aria-label="Change Role"
-                        value={user.role?.toLowerCase() || "collaborator"}
-                        onChange={(e) =>
-                          handleRoleChange(user.id, e.target.value)
-                        }
-                        className="w-32 text-xs"
+                        variant="secondary"
+                        className="capitalize"
                       >
-                        <option value="collaborator">Collaborator</option>
-                        <option value="founder">Founder</option>
-                        <option value="admin">Admin</option>
-                      </Select>
+                        {user.role || "User"}
+                      </Chip>
                     </Table.Cell>
 
+                    {/* Plan Display */}
+                    <Table.Cell>
+                      <Chip
+                        size="sm"
+                        variant="soft"
+                        className="capitalize bg-[#1e4360]/50 text-[#c4e1f0] border border-[#6998AB]/30"
+                      >
+                        {user.plan || "Free"}
+                      </Chip>
+                    </Table.Cell>
+
+                    {/* Ban Status */}
                     <Table.Cell>
                       <Chip
                         size="sm"
@@ -138,6 +139,7 @@ export default function UsersTable() {
                       </Chip>
                     </Table.Cell>
 
+                    {/* User Actions */}
                     <Table.Cell>
                       <div className="flex items-center gap-2">
                         <Button
