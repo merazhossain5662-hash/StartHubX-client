@@ -6,28 +6,36 @@ import { headers } from "next/headers";
 export async function getUsersActiveStatus(userIds) {
   if (!userIds || userIds.length === 0) return {};
 
-  const reqHeaders = await headers();
   const statusMap = {};
+  const reqHeaders = await headers();
+
+  // Convert Next.js ReadonlyHeaders into standard Headers object
+  const headerObj = new Headers();
+  reqHeaders.forEach((value, key) => {
+    headerObj.append(key, value);
+  });
+
+  const now = new Date();
 
   await Promise.all(
     userIds.map(async (userId) => {
       try {
-        // Pass query object instead of body
-        const sessions = await auth.api.listUserSessions({
-          query: { userId },
-          headers: reqHeaders,
+        const res = await auth.api.listUserSessions({
+          body: { userId },
+          headers: headerObj,
         });
 
-        const now = new Date();
+        // Better Auth returns an array or an object with { sessions }
+        const sessionsList = Array.isArray(res) ? res : res?.sessions || [];
 
-        // Ensure sessions is an array and check active expiration dates
-        const hasActiveSession =
-          Array.isArray(sessions) &&
-          sessions.some((s) => new Date(s.expiresAt) > now);
+        // Check if any session token is still valid
+        const hasActiveSession = sessionsList.some(
+          (s) => new Date(s.expiresAt) > now,
+        );
 
         statusMap[userId] = hasActiveSession;
       } catch (err) {
-        console.error(`Failed to fetch session for ${userId}:`, err);
+        console.error(`Error fetching session for user ${userId}:`, err);
         statusMap[userId] = false;
       }
     }),
