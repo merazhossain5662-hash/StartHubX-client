@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { getUsersActiveStatus } from "@/actions/user-status"; // Adjust import path
+import { getUsersActiveStatus } from "@/lib/actions/user-status";
 import {
   Table,
   Avatar,
