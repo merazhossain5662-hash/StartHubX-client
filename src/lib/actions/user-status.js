@@ -1,6 +1,5 @@
 "use server";
-
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/actions/auth";
 import { headers } from "next/headers";
 
 /**
