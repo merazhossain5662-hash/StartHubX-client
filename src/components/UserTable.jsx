@@ -49,7 +49,7 @@ export default function ManageUsersTable() {
 
     if (search.trim()) {
       queryParams.searchField = "name";
-      queryParams.searchValue = search.trim();
+      queryParams.searchValue = search.toLowerCase().trim();
       queryParams.searchOperator = "contains";
     }
 
