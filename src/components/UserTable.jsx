@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { getUsersActiveStatus } from "@/actions/user-status"; // Adjust import path
 import {
   Table,
   Avatar,
@@ -29,6 +30,9 @@ export default function ManageUsersTable() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Maps userId -> boolean (active session status)
+  const [activeMap, setActiveMap] = useState({});
+
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -49,7 +53,7 @@ export default function ManageUsersTable() {
 
     if (search.trim()) {
       queryParams.searchField = "name";
-      queryParams.searchValue = search.toLowerCase().trim();
+      queryParams.searchValue = search.trim();
       queryParams.searchOperator = "contains";
     }
 
@@ -60,6 +64,11 @@ export default function ManageUsersTable() {
     if (data) {
       setUsers(data.users);
       setTotal(data.total);
+
+      // Fetch active session status for all fetched users
+      const userIds = data.users.map((u) => u.id);
+      const statuses = await getUsersActiveStatus(userIds);
+      setActiveMap(statuses);
     }
     setLoading(false);
   };
@@ -83,15 +92,14 @@ export default function ManageUsersTable() {
   const handleRevokeSessions = async (userId) => {
     await authClient.admin.revokeUserSessions({ userId });
     alert("All sessions for this user have been revoked.");
+    fetchUsers();
   };
 
-  // Open Modal Confirmation
   const openDeleteModal = (user) => {
     setSelectedUser(user);
     setIsOpen(true);
   };
 
-  // Perform Hard Delete
   const handleConfirmDelete = async () => {
     if (!selectedUser) return;
 
@@ -154,6 +162,7 @@ export default function ManageUsersTable() {
                   const isPremium =
                     user.plan?.toLowerCase() === "premium" ||
                     user.plan?.toLowerCase() === "pro";
+                  const isOnline = Boolean(activeMap[user.id]);
 
                   return (
                     <Table.Row key={user.id}>
@@ -188,7 +197,7 @@ export default function ManageUsersTable() {
                         </Chip>
                       </Table.Cell>
 
-                      {/* Plan */}
+                      {/* Plan Display */}
                       <Table.Cell>
                         <Chip
                           size="sm"
@@ -203,15 +212,31 @@ export default function ManageUsersTable() {
                         </Chip>
                       </Table.Cell>
 
-                      {/* Status */}
+                      {/* Status Column: Banned > Online > Offline */}
                       <Table.Cell>
-                        <Chip
-                          size="sm"
-                          color={user.banned ? "danger" : "success"}
-                          variant="soft"
-                        >
-                          {user.banned ? "Banned" : "Active"}
-                        </Chip>
+                        {user.banned ? (
+                          <Chip size="sm" color="danger" variant="soft">
+                            Banned
+                          </Chip>
+                        ) : isOnline ? (
+                          <Chip
+                            size="sm"
+                            color="success"
+                            variant="soft"
+                            className="flex items-center gap-1.5"
+                          >
+                            <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            Online
+                          </Chip>
+                        ) : (
+                          <Chip
+                            size="sm"
+                            variant="secondary"
+                            className="text-slate-400"
+                          >
+                            Offline
+                          </Chip>
+                        )}
                       </Table.Cell>
 
                       {/* User Actions */}
@@ -287,7 +312,7 @@ export default function ManageUsersTable() {
         </Table.Footer>
       </Table>
 
-      {/* HeroUI Delete Confirmation Modal */}
+      {/* HeroUI Delete Modal */}
       <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
         <Modal.Backdrop className="bg-black/60 backdrop-blur-xs">
           <Modal.Container>
@@ -302,8 +327,7 @@ export default function ManageUsersTable() {
                 <span className="font-bold text-white">
                   {selectedUser?.name || selectedUser?.email}
                 </span>
-                ? This action cannot be undone and will erase all account
-                records.
+                ? This action cannot be undone.
               </Modal.Body>
               <Modal.Footer className="flex justify-end gap-2 pt-2 border-t border-[#224764]/40">
                 <Button
