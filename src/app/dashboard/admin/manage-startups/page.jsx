@@ -1,7 +1,7 @@
 import StartupsTable from "@/components/StartupsTable";
 import React from "react";
 
-const manageStartups = async () => {
+const manageStartups = async ({ searchParams }) => {
   const searchQ = await searchParams;
   const urlSearchQ = new URLSearchParams(searchQ);
   const searcString = urlSearchQ.toString();
