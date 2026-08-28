@@ -23,7 +23,7 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
   //   });
 
   useEffect(() => {
-    const sp = URLSearchParams();
+    const sp = new URLSearchParams();
     if (search) sp.set("search", search);
     const path = `?${sp.toString()}`;
     router.push(path, { scroll: false });
