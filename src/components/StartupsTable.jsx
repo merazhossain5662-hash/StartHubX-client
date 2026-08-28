@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { Table, Avatar, Chip, Button, Input, Pagination } from "@heroui/react";
 import { Magnifier, CircleCheck, CircleXmark } from "@gravity-ui/icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const ROWS_PER_PAGE = 5;
 
 export default function StartupsTable({ startups = [], onUpdateStatus }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [page, setPage] = useState(1);
 
