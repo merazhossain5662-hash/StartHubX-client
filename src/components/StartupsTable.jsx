@@ -9,7 +9,7 @@ const ROWS_PER_PAGE = 5;
 
 export default function StartupsTable({ startups = [], onUpdateStatus }) {
   const router = useRouter();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchParams.get("search") || "");
   const [page, setPage] = useState(1);
 
   // Filter startups by search query
