@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { Table, Avatar, Chip, Button, Input, Pagination } from "@heroui/react";
 import { Magnifier, CircleCheck, CircleXmark } from "@gravity-ui/icons";
+import { useRouter } from "next/navigation";
 
 const ROWS_PER_PAGE = 5;
 
 export default function StartupsTable({ startups = [], onUpdateStatus }) {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
@@ -23,7 +25,9 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
   useEffect(() => {
     const sp = URLSearchParams();
     if (search) sp.set("search", search);
-  }, [search]);
+    const path = `?${sp.toString()}`;
+    router.push(path, { scroll: false });
+  }, [search, router]);
 
   // Calculate pagination boundaries
   const totalPages = Math.ceil(startups.length / ROWS_PER_PAGE) || 1;
