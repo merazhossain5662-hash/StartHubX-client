@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Avatar, Chip, Button, Input, Pagination } from "@heroui/react";
 import { Magnifier, CircleCheck, CircleXmark } from "@gravity-ui/icons";
 
@@ -11,19 +11,24 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
   const [page, setPage] = useState(1);
 
   // Filter startups by search query
-  const filteredStartups = startups.filter((item) => {
-    const term = search.toLowerCase();
-    return (
-      item.name?.toLowerCase().includes(term) ||
-      item.FounderEmail?.toLowerCase().includes(term) ||
-      item.state?.toLowerCase().includes(term)
-    );
-  });
+  //   const filteredStartups = startups.filter((item) => {
+  //     const term = search.toLowerCase();
+  //     return (
+  //       item.name?.toLowerCase().includes(term) ||
+  //       item.FounderEmail?.toLowerCase().includes(term) ||
+  //       item.state?.toLowerCase().includes(term)
+  //     );
+  //   });
+
+  useEffect(() => {
+    const sp = URLSearchParams();
+    if (search) sp.set("search", search);
+  }, [search]);
 
   // Calculate pagination boundaries
-  const totalPages = Math.ceil(filteredStartups.length / ROWS_PER_PAGE) || 1;
+  const totalPages = Math.ceil(startups.length / ROWS_PER_PAGE) || 1;
   const start = (page - 1) * ROWS_PER_PAGE;
-  const paginatedItems = filteredStartups.slice(start, start + ROWS_PER_PAGE);
+  const paginatedItems = startups.slice(start, start + ROWS_PER_PAGE);
 
   const getStatusChip = (status) => {
     switch (status?.toLowerCase()) {
@@ -193,8 +198,8 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
           <div className="flex items-center justify-between p-3 border-t border-[#224764]/40">
             <span className="text-xs text-slate-400">
               Showing {filteredStartups.length === 0 ? 0 : start + 1} to{" "}
-              {Math.min(start + ROWS_PER_PAGE, filteredStartups.length)} of{" "}
-              {filteredStartups.length} entries
+              {Math.min(start + ROWS_PER_PAGE, startups.length)} of{" "}
+              {startups.length} entries
             </span>
 
             <Pagination size="sm">
