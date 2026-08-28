@@ -1,3 +1,4 @@
+import StartupsTable from "@/components/StartupsTable";
 import React from "react";
 
 const manageStartups = async () => {
@@ -5,8 +6,7 @@ const manageStartups = async () => {
   const startups = await res.json();
   return (
     <div>
-      <h1>Manage Startups</h1>
-      <p>{startups.length} startups found.</p>
+      <StartupsTable startups={startups || []} />
     </div>
   );
 };
