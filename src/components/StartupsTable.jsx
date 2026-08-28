@@ -197,7 +197,7 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
         <Table.Footer>
           <div className="flex items-center justify-between p-3 border-t border-[#224764]/40">
             <span className="text-xs text-slate-400">
-              Showing {filteredStartups.length === 0 ? 0 : start + 1} to{" "}
+              Showing {startups.length === 0 ? 0 : start + 1} to{" "}
               {Math.min(start + ROWS_PER_PAGE, startups.length)} of{" "}
               {startups.length} entries
             </span>
