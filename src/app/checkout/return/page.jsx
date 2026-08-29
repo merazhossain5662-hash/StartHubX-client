@@ -13,7 +13,6 @@ function ReturnContent() {
 
   useEffect(() => {
     if (sessionId) {
-      // Calls the GET route we exported above
       fetch(`/api/checkout?session_id=${sessionId}`)
         .then((res) => res.json())
         .then((data) => {
@@ -24,6 +23,7 @@ function ReturnContent() {
           console.error("Failed to fetch session:", err);
           setLoading(false);
         });
+      console.log(sessionData);
       async function handlePaymentVerification() {
         try {
           const isPaid =
@@ -31,16 +31,14 @@ function ReturnContent() {
             sessionData?.paymentStatus === "paid";
 
           if (isPaid && !isSubscribedRef.current) {
-            isSubscribedRef.current = true; // Guard against duplicate calls
+            isSubscribedRef.current = true;
 
             const userEmail =
               sessionData?.customerEmail || sessionData?.metadata?.userEmail;
             const userId = sessionData?.metadata?.userId;
             const plan = sessionData?.metadata?.plan || "premium";
 
-            // 3. POST to your Express backend route (/api/subscribetion)
             await fetch(`${process.env.NEXT_PUBLIC_URI}/api/subscribetion`, {
-              // Update URL/port to match your Express server URL
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
