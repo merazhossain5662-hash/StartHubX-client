@@ -83,7 +83,7 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
 
         <div className="relative w-full sm:w-72">
           <Magnifier className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-4 pointer-events-none z-10" />
-          <input
+          <Input
             placeholder="Search startup or founder..."
             value={search}
             onChange={(e) => {
