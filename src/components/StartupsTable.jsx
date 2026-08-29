@@ -25,7 +25,9 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
 
   useEffect(() => {
     const sp = new URLSearchParams();
-    if (search) sp.set("search", search);
+    if (search) {
+      sp.set("search", search);
+    }
     const path = `?${sp.toString()}`;
     router.push(path);
   }, [search, router]);
