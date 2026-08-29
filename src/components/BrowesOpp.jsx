@@ -86,7 +86,6 @@ const BrowesOpp = ({ oppData = [], searchQ, totalCount }) => {
     handleFilterChange(setList, updatedList);
   };
 
-  // Clear all filters handler
   const handleClearFilters = () => {
     setSearchTerm("");
     setSelectedWorkTypes([]);
