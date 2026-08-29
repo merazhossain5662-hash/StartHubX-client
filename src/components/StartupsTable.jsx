@@ -27,7 +27,7 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
     const sp = new URLSearchParams();
     if (search) sp.set("search", search);
     const path = `?${sp.toString()}`;
-    router.push(path, { scroll: false });
+    router.push(path);
   }, [search, router]);
 
   // Calculate pagination boundaries
