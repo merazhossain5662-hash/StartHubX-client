@@ -25,18 +25,20 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
 
   const handleFilterChange = (setter, value) => {
     setter(value);
-    setCurrentPage(1);
+    setPage(1);
   };
 
   useEffect(() => {
-    const sp = new URLSearchParams();
-    if (search) {
-      console.log("Setting search param:", search);
-      sp.set("search", search);
-    }
-    const path = `?${sp.toString()}`;
-    console.log("Navigating to:", path);
-    router.push(path);
+    const handler = setTimeout(() => {
+      const sp = new URLSearchParams();
+      if (search.trim()) {
+        sp.set("search", search.trim());
+      }
+      const path = `?${sp.toString()}`;
+      router.push(path, { scroll: false });
+    }, 300);
+
+    return () => clearTimeout(handler);
   }, [search, router]);
 
   // Calculate pagination boundaries
