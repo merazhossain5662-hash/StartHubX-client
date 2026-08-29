@@ -66,6 +66,7 @@ export async function GET(req) {
       customerEmail:
         session.customer_details?.email || session.metadata?.userEmail,
       metadata: session.metadata,
+      amountTotal: session.amount_total,
     });
   } catch (err) {
     console.error("Stripe Session Retrieval Error:", err);

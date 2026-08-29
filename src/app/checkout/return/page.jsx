@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { a } from "framer-motion/client";
 
 function ReturnContent() {
   const [sessionData, setSessionData] = useState(null);
@@ -37,6 +38,7 @@ function ReturnContent() {
               sessionData?.customerEmail || sessionData?.metadata?.userEmail;
             const userId = sessionData?.metadata?.userId;
             const plan = sessionData?.metadata?.plan || "premium";
+            const amountTotal = sessionData?.amountTotal || 0;
 
             await fetch(`${process.env.NEXT_PUBLIC_URI}/api/subscribetion`, {
               method: "POST",
@@ -48,6 +50,8 @@ function ReturnContent() {
                 userEmail,
                 plan,
                 sessionId,
+                amountTotal,
+                status: sessionData?.status,
                 paymentStatus: sessionData?.paymentStatus,
               }),
             });
