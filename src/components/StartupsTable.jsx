@@ -70,18 +70,17 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
           </span>
         </div>
 
-        <div className="w-full sm:w-72">
+        <div className="relative w-full sm:w-72">
+          <Magnifier className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-4 pointer-events-none z-10" />
           <Input
             placeholder="Search startup or founder..."
             value={search}
-            onValueChange={(val) => {
-              setSearch(val);
+            onChange={(e) => {
+              setSearch(e.target.value);
               setPage(1);
             }}
-            startContent={<Magnifier className="text-slate-400 size-4" />}
+            className="pl-9"
             size="sm"
-            isClearable
-            onClear={() => setSearch("")}
           />
         </div>
       </div>
