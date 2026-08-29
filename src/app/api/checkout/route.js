@@ -30,7 +30,7 @@ export async function POST(req) {
               description:
                 "Post unlimited opportunities and build your dream team.",
             },
-            unit_amount: 29.99,
+            unit_amount: 2999,
           },
           quantity: 1,
         },
