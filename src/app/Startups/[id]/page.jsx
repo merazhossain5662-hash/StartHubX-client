@@ -10,7 +10,7 @@ const startupDetailsPage = async ({ params }) => {
   const opportunityRes = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/opportunities/${data?._id}`,
   );
-  const opportunityData = await opportunityRes.json();
+  const { opportunities: opportunityData } = await opportunityRes.json();
   return (
     <div>
       <StartupDetaills

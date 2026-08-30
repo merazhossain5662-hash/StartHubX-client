@@ -104,7 +104,6 @@ const StartupDetaills = async ({ data, opportunityData = [] }) => {
           </div>
         </div>
 
-        {/* 🧑‍💻 Open Roles Section Header */}
         <div className="space-y-6">
           <div className="flex items-center gap-3">
             <h2 className="text-2xl font-bold">Open Roles</h2>
@@ -113,7 +112,6 @@ const StartupDetaills = async ({ data, opportunityData = [] }) => {
             </div>
           </div>
 
-          {/* 📦 Roles Grid Matrix Layout */}
           {opportunityData.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {opportunityData.map((role) => {
@@ -129,7 +127,6 @@ const StartupDetaills = async ({ data, opportunityData = [] }) => {
                         {role.Title}
                       </h3>
 
-                      {/* Skills Mapping Badges */}
                       <div className="flex flex-wrap gap-1.5">
                         {role.Skills?.map((skill, idx) => (
                           <Chip
