@@ -88,7 +88,7 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
           >
             Applied
           </Button>
-        ) : expDate ? (
+        ) : expDate == 0 ? (
           <Button
             className="w-full py-2 px-4 rounded-xl text-xs font-semibold border border-red-900/75 bg-red-400/25 backdrop-blur-md text-white hover:bg-yellow-400/75 hover:border-[#8dd0f2] hover:shadow-[0_0_15px_rgba(141,208,242,0.2)] transition duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
             isDisabled
