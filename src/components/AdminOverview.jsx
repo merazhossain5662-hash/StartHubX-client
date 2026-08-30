@@ -5,6 +5,7 @@ import { Chip } from "@heroui/react";
 import { Rocket, Briefcase, Persons, CircleDollar } from "@gravity-ui/icons";
 
 const AdminOverview = ({ data }) => {
+  const { totalStartups, totalOpportunities, totalUsers, totalRevenue } = data;
   const statItems = [
     {
       title: "Total Revenue",
