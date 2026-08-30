@@ -292,7 +292,9 @@ const BrowesOpp = ({ oppData = [], searchQ, totalCount }) => {
                           </div>
                           <AppalyModal
                             opportunityData={role}
-                            StartupData={data}
+                            StartupData={
+                              role.startupId ? { _id: role.startupId } : null
+                            }
                             user={session?.user || null}
                           ></AppalyModal>
                         </div>
