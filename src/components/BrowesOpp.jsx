@@ -3,9 +3,11 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Chip } from "@heroui/react";
 import { Globe, Clock, Calendar, Magnifier } from "@gravity-ui/icons";
+import AppalyModal from "./AppalyModal";
 import getDateStatus from "@/lib/actions/getDateStatus";
 import { useRouter } from "next/navigation";
 import PaginationBar from "./PaginationBar"; // Import the pagination component
+import { authClient } from "@/lib/auth-client";
 
 const WORK_TYPES = ["Remote", "Onsite", "Hybrid"];
 
@@ -17,7 +19,7 @@ const parseParamArray = (param) => {
 
 const BrowesOpp = ({ oppData = [], searchQ, totalCount }) => {
   const router = useRouter();
-
+  const { data: session, isPending } = authClient.useSession();
   // Initialize state from searchParams
   const [searchTerm, setSearchTerm] = useState(searchQ?.search || "");
   const [selectedWorkTypes, setSelectedWorkTypes] = useState(() =>
@@ -221,7 +223,7 @@ const BrowesOpp = ({ oppData = [], searchQ, totalCount }) => {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {oppData.map((role) => {
                   const expDate = getDateStatus(role.date);
-
+                  if (startupStatus !== "approved") return null;
                   return (
                     <div
                       key={role._id}
@@ -286,15 +288,11 @@ const BrowesOpp = ({ oppData = [], searchQ, totalCount }) => {
                             <span>{role.date}</span>
                           </div>
                         </div>
-
-                        <button
-                          disabled={expDate < 0}
-                          className="w-full py-2 px-4 rounded-xl text-xs font-semibold border border-[#8dd0f2]/40 bg-[#8dd0f2]/10 backdrop-blur-md text-[#8dd0f2] hover:bg-[#8dd0f2]/20 hover:border-[#8dd0f2] hover:shadow-[0_0_15px_rgba(141,208,242,0.2)] transition duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                          {expDate < 0
-                            ? "Opportunity Expired"
-                            : "Login to Apply"}
-                        </button>
+                        <AppalyModal
+                          opportunityData={role}
+                          StartupData={data}
+                          user={session?.user || null}
+                        ></AppalyModal>
                       </div>
                     </div>
                   );

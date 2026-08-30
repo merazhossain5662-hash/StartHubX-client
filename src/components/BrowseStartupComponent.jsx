@@ -11,7 +11,6 @@ const BrowseStartupComponent = ({ datas }) => {
   const [stage, setStage] = useState("All");
   console.log(stage, "afcar", industry);
 
-  // 🔍 Filtering logic
   const filteredData = useMemo(() => {
     return datas.filter((item) => {
       const matchSearch =
@@ -28,13 +27,11 @@ const BrowseStartupComponent = ({ datas }) => {
     });
   }, [datas, search, industry, stage]);
 
-  // 🧠 Unique dropdown values
   const industries = ["All", ...new Set(datas.map((d) => d.state))];
   const stages = ["All", ...new Set(datas.map((d) => d.FundingStage))];
 
   return (
     <div className="min-h-screen  text-white px-6 py-10">
-      {/* 🔥 Header */}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold">
           Browse <span className="text-purple-500">Startups</span>
@@ -44,7 +41,6 @@ const BrowseStartupComponent = ({ datas }) => {
         </p>
       </div>
 
-      {/* 🔎 Filters */}
       <div className="max-w-5xl mx-auto space-y-4 mb-10">
         <div className="relative">
           <input
@@ -120,41 +116,51 @@ const BrowseStartupComponent = ({ datas }) => {
           </Button>
         </div>
       </div>
-      {/* 📦 Cards */}
+
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {filteredData.length > 0 ? (
-          filteredData.map((item) => (
-            <Link key={item._id} href={`/Startups/${item._id}`}>
-              <div className="bg-[#0f172a] border border-gray-700 rounded-xl p-5 hover:border-purple-500 transition">
-                {/* Top */}
-                <div className="flex items-center gap-3 mb-3">
-                  <Avatar className="size-16 rounded-2xl">
-                    <Avatar.Image alt="Extra Large" src={item?.profileImage} />
-                    <Avatar.Fallback className="bg-[#204561] text-lg">
-                      {item.name?.[0].toUpperCase() || "?"}
-                    </Avatar.Fallback>
-                  </Avatar>
-                  <div>
-                    <h2 className="font-semibold">{item.name}</h2>
-                    <p className="text-xs text-gray-400">{item.FounderEmail}</p>
+          filteredData.map((item) => {
+            if (item.status !== "approved") return null;
+            return (
+              <Link key={item._id} href={`/Startups/${item._id}`}>
+                <div className="bg-[#0f172a] border border-gray-700 rounded-xl p-5 hover:border-purple-500 transition">
+                  {/* Top */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <Avatar className="size-16 rounded-2xl">
+                      <Avatar.Image
+                        alt="Extra Large"
+                        src={item?.profileImage}
+                      />
+                      <Avatar.Fallback className="bg-[#204561] text-lg">
+                        {item.name?.[0].toUpperCase() || "?"}
+                      </Avatar.Fallback>
+                    </Avatar>
+                    <div>
+                      <h2 className="font-semibold">{item.name}</h2>
+                      <p className="text-xs text-gray-400">
+                        {item.FounderEmail}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-gray-300 mb-4">
+                    {item.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex gap-2 flex-wrap">
+                    <Chip size="sm" color="secondary" variant="flat">
+                      {item.state}
+                    </Chip>
+                    <Chip size="sm" variant="bordered">
+                      {item.FundingStage}
+                    </Chip>
                   </div>
                 </div>
-
-                {/* Description */}
-                <p className="text-sm text-gray-300 mb-4">{item.description}</p>
-
-                {/* Tags */}
-                <div className="flex gap-2 flex-wrap">
-                  <Chip size="sm" color="secondary" variant="flat">
-                    {item.state}
-                  </Chip>
-                  <Chip size="sm" variant="bordered">
-                    {item.FundingStage}
-                  </Chip>
-                </div>
-              </div>
-            </Link>
-          ))
+              </Link>
+            );
+          })
         ) : (
           <p className="text-center col-span-full text-gray-400">
             No startups found.

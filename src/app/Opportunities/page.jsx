@@ -30,6 +30,7 @@ const OpportunitiesPage = async ({ searchParams }) => {
       return {
         ...opp,
         startupName: startupData?.name,
+        startupStatus: startupData?.status,
         industry: startupData?.state,
       };
     }),

@@ -41,7 +41,6 @@ const StartupDetaills = async ({ data, opportunityData = [] }) => {
           Back to Startups
         </Link>
 
-        {/* 🏢 Main Startup Card Container */}
         <div className="bg-[#0f172a]/40 border border-gray-800 rounded-2xl p-8 flex flex-col md:flex-row items-start gap-6">
           {/* App Logo Placeholder */}
           <Avatar className="size-16 rounded-2xl">

@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const ROWS_PER_PAGE = 8;
 
-export default function StartupsTable({ startups = [], onUpdateStatus }) {
+export default function StartupsTable({ startups = [] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
@@ -26,6 +26,37 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
   const handleFilterChange = (setter, value) => {
     setter(value);
     setPage(1);
+  };
+
+  const handleApprove = async (startupId) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URI}/api/admin/startups/${startupId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: "approved" }),
+      },
+    );
+    if (response.ok) {
+      router.refresh();
+    }
+  };
+
+  const handleRemove = async (startupId) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URI}/api/admin/startups/${startupId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (response.ok) {
+      router.refresh();
+    }
   };
 
   useEffect(() => {
@@ -203,9 +234,7 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
                             <Button
                               size="sm"
                               className="border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500 transition duration-300"
-                              onClick={() =>
-                                onUpdateStatus?.(item._id, "approved")
-                              }
+                              onClick={() => handleApprove(item._id)}
                               title="Approve Startup"
                             >
                               <CircleCheck className="size-4" />
@@ -216,10 +245,7 @@ export default function StartupsTable({ startups = [], onUpdateStatus }) {
                             <Button
                               size="sm"
                               className="border border-rose-500/40 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500 transition duration-300"
-                              onClick={() =>
-                                onUpdateStatus?.(item._id, "rejected")
-                              }
-                              title="Reject Startup"
+                              title="Remove Startup"
                             >
                               <CircleXmark className="size-4" />
                             </Button>

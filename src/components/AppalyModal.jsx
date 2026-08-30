@@ -23,7 +23,7 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isApplaid, setIsApplaid] = useState(null);
-
+  const expDate = getDateStatus(opportunityData?.date);
   useEffect(() => {
     if (!user || !opportunityData?._id) return;
 
@@ -76,14 +76,31 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
         {!user ? (
           <Button
             onClick={() => redirect("/login")}
-            className="w-full rounded-lg bg-[#8dd0f2]/7 border border-gray-700"
+            className="w-full py-2 px-4 rounded-xl text-xs font-semibold border border-[#8dd0f2]/40 bg-[#8dd0f2]/10 backdrop-blur-md text-[#8dd0f2] hover:bg-[#8dd0f2]/20 hover:border-[#8dd0f2] hover:shadow-[0_0_15px_rgba(141,208,242,0.2)] transition duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Login To Applay
           </Button>
         ) : isApplaid ? (
-          <Button isDisabled>Applied</Button>
+          <Button
+            className="w-full py-2 px-4 rounded-xl text-xs font-semibold border border-[#8dd0f2]/40 bg-yellow-400/25 backdrop-blur-md text-black hover:bg-yellow-400/75 hover:border-[#8dd0f2] hover:shadow-[0_0_15px_rgba(141,208,242,0.2)] transition duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            isDisabled
+          >
+            Applied
+          </Button>
+        ) : expDate ? (
+          <Button
+            className="w-full py-2 px-4 rounded-xl text-xs font-semibold border border-red-900/75 bg-red-400/25 backdrop-blur-md text-white hover:bg-yellow-400/75 hover:border-[#8dd0f2] hover:shadow-[0_0_15px_rgba(141,208,242,0.2)] transition duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            isDisabled
+          >
+            Opportunity Expired
+          </Button>
         ) : userRole === "collaborator" ? (
-          <Button onPress={() => setIsOpen(true)}>Applay Now</Button>
+          <Button
+            className="w-full py-2 px-4 rounded-xl text-xs font-semibold border border-[#8dd0f2]/40 bg-[#8dd0f2]/10 backdrop-blur-md text-[#8dd0f2] hover:bg-[#8dd0f2]/20 hover:border-[#8dd0f2] hover:shadow-[0_0_15px_rgba(141,208,242,0.2)] transition duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            onPress={() => setIsOpen(true)}
+          >
+            Applay Now
+          </Button>
         ) : (
           <Tooltip delay={0}>
             <Tooltip.Trigger>
