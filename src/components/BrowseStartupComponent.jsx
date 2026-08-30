@@ -23,7 +23,7 @@ const BrowseStartupComponent = ({ datas }) => {
         stage === "All" ||
         item.FundingStage.toLowerCase() === stage.toLowerCase();
 
-      return matchSearch && matchIndustry && matchStage && approvedStatus;
+      return matchSearch && matchIndustry && matchStage;
     });
   }, [datas, search, industry, stage]);
 
