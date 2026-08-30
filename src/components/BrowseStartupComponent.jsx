@@ -17,8 +17,6 @@ const BrowseStartupComponent = ({ datas }) => {
         item.name.toLowerCase().includes(search.toLowerCase()) ||
         item.description.toLowerCase().includes(search.toLowerCase());
 
-      const approvedStatus = item.status === "approved";
-
       const matchIndustry = industry === "All" || item.state === industry;
 
       const matchStage =
