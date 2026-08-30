@@ -17,13 +17,15 @@ const BrowseStartupComponent = ({ datas }) => {
         item.name.toLowerCase().includes(search.toLowerCase()) ||
         item.description.toLowerCase().includes(search.toLowerCase());
 
+      const approvedStatus = item.status === "approved";
+
       const matchIndustry = industry === "All" || item.state === industry;
 
       const matchStage =
         stage === "All" ||
         item.FundingStage.toLowerCase() === stage.toLowerCase();
 
-      return matchSearch && matchIndustry && matchStage;
+      return matchSearch && matchIndustry && matchStage && approvedStatus;
     });
   }, [datas, search, industry, stage]);
 
@@ -119,48 +121,38 @@ const BrowseStartupComponent = ({ datas }) => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {filteredData.length > 0 ? (
-          filteredData.map((item) => {
-            if (item.status !== "approved") return null;
-            return (
-              <Link key={item._id} href={`/Startups/${item._id}`}>
-                <div className="bg-[#0f172a] border border-gray-700 rounded-xl p-5 hover:border-purple-500 transition">
-                  {/* Top */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <Avatar className="size-16 rounded-2xl">
-                      <Avatar.Image
-                        alt="Extra Large"
-                        src={item?.profileImage}
-                      />
-                      <Avatar.Fallback className="bg-[#204561] text-lg">
-                        {item.name?.[0].toUpperCase() || "?"}
-                      </Avatar.Fallback>
-                    </Avatar>
-                    <div>
-                      <h2 className="font-semibold">{item.name}</h2>
-                      <p className="text-xs text-gray-400">
-                        {item.FounderEmail}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-sm text-gray-300 mb-4">
-                    {item.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex gap-2 flex-wrap">
-                    <Chip size="sm" color="secondary" variant="flat">
-                      {item.state}
-                    </Chip>
-                    <Chip size="sm" variant="bordered">
-                      {item.FundingStage}
-                    </Chip>
+          filteredData.map((item) => (
+            <Link key={item._id} href={`/Startups/${item._id}`}>
+              <div className="bg-[#0f172a] border border-gray-700 rounded-xl p-5 hover:border-purple-500 transition">
+                {/* Top */}
+                <div className="flex items-center gap-3 mb-3">
+                  <Avatar className="size-16 rounded-2xl">
+                    <Avatar.Image alt="Extra Large" src={item?.profileImage} />
+                    <Avatar.Fallback className="bg-[#204561] text-lg">
+                      {item.name?.[0].toUpperCase() || "?"}
+                    </Avatar.Fallback>
+                  </Avatar>
+                  <div>
+                    <h2 className="font-semibold">{item.name}</h2>
+                    <p className="text-xs text-gray-400">{item.FounderEmail}</p>
                   </div>
                 </div>
-              </Link>
-            );
-          })
+
+                {/* Description */}
+                <p className="text-sm text-gray-300 mb-4">{item.description}</p>
+
+                {/* Tags */}
+                <div className="flex gap-2 flex-wrap">
+                  <Chip size="sm" color="secondary" variant="flat">
+                    {item.state}
+                  </Chip>
+                  <Chip size="sm" variant="bordered">
+                    {item.FundingStage}
+                  </Chip>
+                </div>
+              </div>
+            </Link>
+          ))
         ) : (
           <p className="text-center col-span-full text-gray-400">
             No startups found.

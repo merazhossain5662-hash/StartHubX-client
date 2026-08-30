@@ -223,79 +223,82 @@ const BrowesOpp = ({ oppData = [], searchQ, totalCount }) => {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {oppData.map((role) => {
                   const expDate = getDateStatus(role.date);
-                  if (startupStatus !== "approved") return null;
-                  return (
-                    <div
-                      key={role._id}
-                      className="bg-[#0f172a]/40 backdrop-blur-md shadow-2xl border border-white/10 hover:border-[#8dd0f2]/40 rounded-2xl p-6 flex flex-col justify-between hover:-translate-y-1 transition duration-300 space-y-6"
-                    >
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-start gap-2">
-                          <h3 className="font-semibold text-gray-100 text-base line-clamp-1">
-                            {role.Title}
-                          </h3>
+                  if (role?.startupStatus !== "approved") {
+                    return <></>;
+                  } else {
+                    return (
+                      <div
+                        key={role._id}
+                        className="bg-[#0f172a]/40 backdrop-blur-md shadow-2xl border border-white/10 hover:border-[#8dd0f2]/40 rounded-2xl p-6 flex flex-col justify-between hover:-translate-y-1 transition duration-300 space-y-6"
+                      >
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-start gap-2">
+                            <h3 className="font-semibold text-gray-100 text-base line-clamp-1">
+                              {role.Title}
+                            </h3>
 
-                          <Chip
-                            size="sm"
-                            className={`text-xs border shrink-0 backdrop-blur-sm ${
-                              expDate < 0
-                                ? "border-rose-500/40 bg-rose-500/10 text-rose-400"
-                                : expDate < 3
-                                  ? "border-amber-500/40 bg-amber-500/10 text-amber-400"
-                                  : "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
-                            }`}
-                          >
-                            {expDate < 0 ? "Expired" : `${expDate}d left`}
-                          </Chip>
-                        </div>
-
-                        <p className="text-xs text-[#8dd0f2] font-light">
-                          {role.startupName || "Startup"}
-                        </p>
-
-                        <div className="flex flex-wrap gap-1.5">
-                          {role.Skills?.map((skill, idx) => (
                             <Chip
-                              key={idx}
                               size="sm"
-                              variant="flat"
-                              className="bg-[#001321]/50 text-[#8dd0f2] border border-[#8dd0f2]/30 text-[11px] font-medium backdrop-blur-sm"
+                              className={`text-xs border shrink-0 backdrop-blur-sm ${
+                                expDate < 0
+                                  ? "border-rose-500/40 bg-rose-500/10 text-rose-400"
+                                  : expDate < 3
+                                    ? "border-amber-500/40 bg-amber-500/10 text-amber-400"
+                                    : "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                              }`}
                             >
-                              {skill}
+                              {expDate < 0 ? "Expired" : `${expDate}d left`}
                             </Chip>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-4 pt-2 border-t border-white/5">
-                        <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-400">
-                          <div className="flex items-center gap-1">
-                            <Globe size={14} className="text-gray-500" />
-                            <span className="capitalize">
-                              {role.state?.toLowerCase()}
-                            </span>
                           </div>
 
-                          <div className="flex items-center gap-1">
-                            <Clock size={14} className="text-gray-500" />
-                            <span className="capitalize">
-                              {role.CommitmentLevel?.toLowerCase()}
-                            </span>
-                          </div>
+                          <p className="text-xs text-[#8dd0f2] font-light">
+                            {role.startupName || "Startup"}
+                          </p>
 
-                          <div className="flex items-center gap-1">
-                            <Calendar size={14} className="text-gray-500" />
-                            <span>{role.date}</span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {role.Skills?.map((skill, idx) => (
+                              <Chip
+                                key={idx}
+                                size="sm"
+                                variant="flat"
+                                className="bg-[#001321]/50 text-[#8dd0f2] border border-[#8dd0f2]/30 text-[11px] font-medium backdrop-blur-sm"
+                              >
+                                {skill}
+                              </Chip>
+                            ))}
                           </div>
                         </div>
-                        <AppalyModal
-                          opportunityData={role}
-                          StartupData={data}
-                          user={session?.user || null}
-                        ></AppalyModal>
+
+                        <div className="space-y-4 pt-2 border-t border-white/5">
+                          <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-400">
+                            <div className="flex items-center gap-1">
+                              <Globe size={14} className="text-gray-500" />
+                              <span className="capitalize">
+                                {role.state?.toLowerCase()}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                              <Clock size={14} className="text-gray-500" />
+                              <span className="capitalize">
+                                {role.CommitmentLevel?.toLowerCase()}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                              <Calendar size={14} className="text-gray-500" />
+                              <span>{role.date}</span>
+                            </div>
+                          </div>
+                          <AppalyModal
+                            opportunityData={role}
+                            StartupData={data}
+                            user={session?.user || null}
+                          ></AppalyModal>
+                        </div>
                       </div>
-                    </div>
-                  );
+                    );
+                  }
                 })}
               </div>
             ) : (
