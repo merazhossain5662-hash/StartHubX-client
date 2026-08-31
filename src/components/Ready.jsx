@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Button } from "@heroui/react";
 import { ArrowRight } from "@gravity-ui/icons";
+import Link from "next/link";
 
 const Ready = () => {
   return (
@@ -16,15 +17,20 @@ const Ready = () => {
             together.
           </p>
           <div className="flex flex-col mx-auto md:flex-row md:gap-0.5 gap-4 items-center justify-center">
-            <Button className="round min-w-70 min-h-12 bg-linear-to-r md:text-xl text-lg from-[#173b52] via-[#1e4360]  to-[#21435a] text-[#c4e1f0] py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 ease-in-out">
-              Get Started <ArrowRight className="inline-block ml-2" />
-            </Button>
-            <Button
-              variant="outline"
-              className="ml-4 min-w-70 min-h-12 py-2 rounded-xl px-4 md:text-xl text-lg text-[#c4e1f0] border-[#224764] hover:bg-[#173b52] hover:text-[#8dd0f2]"
-            >
-              Browse Opportunities
-            </Button>
+            <Link href="/startups">
+              {" "}
+              <Button className="round min-w-70 min-h-12 bg-linear-to-r md:text-xl text-lg from-[#173b52] via-[#1e4360]  to-[#21435a] text-[#c4e1f0] py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 ease-in-out">
+                Get Started <ArrowRight className="inline-block ml-2" />
+              </Button>
+            </Link>
+            <Link href="/opportunities">
+              <Button
+                variant="outline"
+                className="ml-4 min-w-70 min-h-12 py-2 rounded-xl px-4 md:text-xl text-lg text-[#c4e1f0] border-[#224764] hover:bg-[#173b52] hover:text-[#8dd0f2]"
+              >
+                Browse Opportunities
+              </Button>
+            </Link>
           </div>
         </Card.Content>
       </Card>
