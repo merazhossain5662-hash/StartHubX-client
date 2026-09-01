@@ -13,7 +13,7 @@ import {
 } from "@gravity-ui/icons";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 const RegisterPage = () => {
   const [role, setRole] = useState("Collaborator");
@@ -21,6 +21,7 @@ const RegisterPage = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
+  const router = useRouter();
 
   // 🔥 IMAGE UPLOAD TO IMGBB
   const [imageError, setImageError] = useState("");
@@ -79,7 +80,7 @@ const RegisterPage = () => {
       alert("Fix image errors before submitting.");
       return;
     }
-
+    setLoading(true);
     const formData = new FormData(e.currentTarget);
     const finalPassword =
       formData.get("password") === formData.get("confirmPassword");
@@ -126,7 +127,9 @@ const RegisterPage = () => {
         alert(roleData.message || "Failed to set user role.");
         return;
       }
-      alert("Account Created Successfully!");
+      alert("Account Created Successfully! please login to continue.");
+      setLoading(false);
+      router.refresh();
       redirect("/login");
     }
 
@@ -324,6 +327,8 @@ const RegisterPage = () => {
           {/* SUBMIT */}
           <Button
             type="submit"
+            isPending={loading}
+            disabled={loading}
             className="w-full rounded-xl py-2.5 text-sm font-medium bg-linear-to-r from-[#2a587b] via-[#437fac] to-[#6bc8f6] hover:opacity-90 transition"
           >
             Create Account
