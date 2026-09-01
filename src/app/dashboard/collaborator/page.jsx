@@ -34,7 +34,6 @@ const collaboratorPage = () => {
       <div className="mb-10 space-y-2">
         <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-2">
           Welcome, Boboiboy{" "}
-          <span className="animate-bounce inline-block">👋</span>
         </h1>
         <p className="text-slate-400 text-base">
           Discover opportunities and track your applications.
