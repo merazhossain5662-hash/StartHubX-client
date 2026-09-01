@@ -9,7 +9,6 @@ export async function getUsersActiveStatus(userIds) {
   const statusMap = {};
   const reqHeaders = await headers();
 
-  // Convert Next.js ReadonlyHeaders into standard Headers object
   const headerObj = new Headers();
   reqHeaders.forEach((value, key) => {
     headerObj.append(key, value);

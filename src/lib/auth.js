@@ -16,18 +16,21 @@ export const auth = betterAuth({
   },
   user: {
     additionalFields: {
-      plan: { default: "free" },
+      role: {
+        type: "string",
+        defaultValue: "collaborator",
+        // 'input: true' allows client-side updates via updateUser
+        input: true,
+      },
+      plan: {
+        type: "string",
+        defaultValue: "free",
+        input: true,
+      },
     },
   },
   plugins: [
     admin({
-      defaultRole: "collaborator",
-
-      roles: {
-        founder: "founder",
-        collaborator: "collaborator",
-      },
-
       allowUserToSetRole: true,
     }),
   ],
