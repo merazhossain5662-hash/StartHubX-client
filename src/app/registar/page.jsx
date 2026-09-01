@@ -102,7 +102,6 @@ const RegisterPage = () => {
       email: data.email, // required
       password: data.password, // required
       image: data.profileImage,
-      role: data.role,
       plan: "free",
       callbackURL: "/login",
     });
@@ -112,7 +111,22 @@ const RegisterPage = () => {
       return;
     }
     if (signUpData) {
-      alert("Account Created 🚀");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URI}/api/user/roler/${signUpData.user.email}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role: data.role }),
+        },
+      );
+      const roleData = await response.json();
+      if (!response.ok) {
+        alert(roleData.message || "Failed to set user role.");
+        return;
+      }
+      alert("Account Created Successfully!");
       redirect("/login");
     }
 
