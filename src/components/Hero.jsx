@@ -39,7 +39,7 @@ const Hero = () => {
           to life — faster and smarter.
         </p>
         <div className="flex flex-col md:flex-row md:gap-0.5 gap-4 items-center justify-center">
-          <Link href="/startups">
+          <Link href="/Startups">
             <Button
               size="lg"
               className="round bg-linear-to-r text-lg from-[#173b52] via-[#1e4360]  to-[#21435a] text-[#c4e1f0] py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 ease-in-out"
@@ -48,7 +48,7 @@ const Hero = () => {
               <ArrowRight className="ml-2" />
             </Button>
           </Link>
-          <Link href="/opportunities">
+          <Link href="/Opportunities">
             <Button
               size="lg"
               className="round bg-linear-to-r text-lg from-[#173b52] via-[#1e4360]  to-[#21435a] text-[#c4e1f0] py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 ease-in-out"

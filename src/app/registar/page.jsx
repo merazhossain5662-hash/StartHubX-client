@@ -107,6 +107,7 @@ const RegisterPage = () => {
 
     if (error) {
       alert(error.message || "An error occurred during sign-up.");
+      setLoading(false);
       return;
     }
     if (signUpData) {
@@ -123,6 +124,7 @@ const RegisterPage = () => {
       const roleData = await response.json();
       if (!response.ok) {
         alert(roleData.message || "Failed to set user role.");
+        setLoading(false);
         return;
       }
       alert("Account Created Successfully! please login to continue.");
