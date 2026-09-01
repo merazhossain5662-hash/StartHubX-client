@@ -16,13 +16,19 @@ export const auth = betterAuth({
   },
   user: {
     additionalFields: {
-      role: {
-        type: "string",
-        defaultValue: "collaborator",
-        input: true,
-      },
       plan: { default: "free" },
     },
   },
-  plugins: [admin()],
+  plugins: [
+    admin({
+      defaultRole: "collaborator",
+
+      roles: {
+        founder: "founder",
+        collaborator: "collaborator",
+      },
+
+      allowUserToSetRole: true,
+    }),
+  ],
 });
