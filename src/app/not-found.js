@@ -33,14 +33,15 @@ const NotFound = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-          <Button
-            as={Link}
-            href="/"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-[#2a587b] via-[#437fac] to-[#6bc8f6] hover:opacity-95 shadow-lg shadow-[#022b3f]/50 transition"
-          >
-            <House className="size-4" />
-            Back to Home
-          </Button>
+          <Link href="/">
+            <Button
+              variant="secondary"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium text-[#c4e1f0] border border-[#224764] bg-transparent hover:bg-[#1e4360]/40 hover:border-[#8dd0f2]/50 transition"
+            >
+              <House className="size-4" />
+              Go Home
+            </Button>
+          </Link>
 
           <Button
             onClick={() => window.history.back()}

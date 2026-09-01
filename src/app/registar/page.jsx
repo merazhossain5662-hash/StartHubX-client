@@ -12,7 +12,7 @@ import {
   EyeSlash,
 } from "@gravity-ui/icons";
 import Image from "next/image";
-import { authClient } from "@/lib/auth-client";
+import { authClient, signIn } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 const RegisterPage = () => {
   const [role, setRole] = useState("Collaborator");
@@ -23,6 +23,13 @@ const RegisterPage = () => {
 
   // 🔥 IMAGE UPLOAD TO IMGBB
   const [imageError, setImageError] = useState("");
+
+  const handleGoogleSignIn = async () => {
+    await signIn.social({
+      provider: "google",
+      callbackURL: "/onboarding",
+    });
+  };
 
   const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
@@ -165,6 +172,7 @@ const RegisterPage = () => {
           {/* GOOGLE BTN */}
           <button
             type="button"
+            onClick={handleGoogleSignIn}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm text-gray-200"
           >
             <img

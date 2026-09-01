@@ -5,12 +5,18 @@ import { Button, Form, Input, Label } from "@heroui/react";
 import logoimage from "@/assets/logo.png";
 import Image from "next/image";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
+import { authClient, signIn } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 const LoginPage = () => {
   const router = useRouter();
   router.refresh();
   const [showPass, setShowPass] = useState(false);
+  const handleGoogleSignIn = async () => {
+    await signIn.social({
+      provider: "google",
+      callbackURL: "/onboarding", // Redirects to onboarding to pick role post-auth
+    });
+  };
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -70,6 +76,7 @@ const LoginPage = () => {
             {/* GOOGLE BTN */}
             <button
               type="button"
+              onClick={handleGoogleSignIn}
               className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm text-gray-200"
             >
               <img
