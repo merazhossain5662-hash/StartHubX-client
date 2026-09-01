@@ -13,15 +13,13 @@ import {
 } from "@gravity-ui/icons";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
-import { redirect, useRouter } from "next/navigation";
-
+import { redirect } from "next/navigation";
 const RegisterPage = () => {
   const [role, setRole] = useState("Collaborator");
   const [preview, setPreview] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
-  const router = useRouter();
 
   // 🔥 IMAGE UPLOAD TO IMGBB
   const [imageError, setImageError] = useState("");
@@ -129,7 +127,7 @@ const RegisterPage = () => {
       }
       alert("Account Created Successfully! please login to continue.");
       setLoading(false);
-      router.refresh();
+
       redirect("/login");
     }
 

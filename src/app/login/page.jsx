@@ -6,7 +6,10 @@ import logoimage from "@/assets/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 const LoginPage = () => {
+  const router = useRouter();
+  router.refresh();
   const [showPass, setShowPass] = useState(false);
   const onSubmit = async (e) => {
     e.preventDefault();
