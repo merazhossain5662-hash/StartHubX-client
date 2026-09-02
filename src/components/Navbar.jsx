@@ -24,7 +24,6 @@ import { redirect } from "next/navigation";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session, isPending } = authClient.useSession();
-  console.log(session);
 
   return (
     <nav className="sticky top-0 z-40 w-full shadow-2xl bg-transparent border-b border-b-[#012035] backdrop-blur-lg">
