@@ -10,16 +10,16 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (
-      session?.user?.role === "Founder" ||
-      session?.user?.role === "Collaborator"
+      session?.user?.role?.toLocaleLowerCase() === "Founder" ||
+      session?.user?.role?.toLocaleLowerCase() === "Collaborator"
     ) {
-      router.push("/dashboard");
+      router.push(`/dashboard/${session.user.role.toLocaleLowerCase()}`);
     }
   }, [session, router]);
 
   const selectRole = async (chosenRole) => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URI}/api/user/roler/${session.user.email}`,
+      `${process.env.NEXT_PUBLIC_URI}/api/user/roler/${session?.user?.email}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -28,7 +28,7 @@ export default function OnboardingPage() {
     );
 
     if (res.ok) {
-      router.push("/dashboard");
+      router.push(`/dashboard/${chosenRole.toLocaleLowerCase()}`);
     }
   };
 
