@@ -9,14 +9,17 @@ export default function OnboardingPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (session?.user?.role) {
+    if (
+      session?.user?.role === "Founder" ||
+      session?.user?.role === "Collaborator"
+    ) {
       router.push("/dashboard");
     }
   }, [session, router]);
 
   const selectRole = async (chosenRole) => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URI}/api/user/role/${session.user.email}`,
+      `${process.env.NEXT_PUBLIC_URI}/api/user/roler/${session.user.email}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
