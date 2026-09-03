@@ -13,16 +13,6 @@ export default function StartupsTable({ startups = [] }) {
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [page, setPage] = useState(1);
 
-  // Filter startups by search query
-  //   const filteredStartups = startups.filter((item) => {
-  //     const term = search.toLowerCase();
-  //     return (
-  //       item.name?.toLowerCase().includes(term) ||
-  //       item.FounderEmail?.toLowerCase().includes(term) ||
-  //       item.state?.toLowerCase().includes(term)
-  //     );
-  //   });
-
   const handleFilterChange = (setter, value) => {
     setter(value);
     setPage(1);
