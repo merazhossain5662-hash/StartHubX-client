@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Table, Avatar, Chip, Button, Input, Pagination } from "@heroui/react";
 import { Magnifier, CircleCheck, CircleXmark } from "@gravity-ui/icons";
 import { useRouter, useSearchParams } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const ROWS_PER_PAGE = 8;
 
@@ -19,12 +20,14 @@ export default function StartupsTable({ startups = [] }) {
   };
 
   const handleApprove = async (startupId) => {
+    const { data, error } = await authClient.token();
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URI}/api/admin/startups/${startupId}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${data?.token}`,
         },
         body: JSON.stringify({ status: "approved" }),
       },
@@ -35,12 +38,14 @@ export default function StartupsTable({ startups = [] }) {
   };
 
   const handleRemove = async (startupId) => {
+    const { data, error } = await authClient.token();
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URI}/api/admin/startups/${startupId}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${data?.token}`,
         },
       },
     );
@@ -236,6 +241,7 @@ export default function StartupsTable({ startups = [] }) {
                               size="sm"
                               className="border border-rose-500/40 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500 transition duration-300"
                               title="Remove Startup"
+                              onClick={() => handleRemove(item._id)}
                             >
                               <CircleXmark className="size-4" />
                             </Button>
