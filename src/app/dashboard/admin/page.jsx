@@ -7,6 +7,7 @@ const adminDashboard = async () => {
   const { token } = auth.api.getToken({
     headers: await headers(),
   });
+  console.log("Token:", token); // Log the token to verify it's being retrieved correctly
   const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/api/admin/overview`, {
     headers: {
       Authorization: `Bearer ${token}`,
