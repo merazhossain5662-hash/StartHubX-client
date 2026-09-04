@@ -7,7 +7,7 @@ const manageStartups = async ({ searchParams }) => {
   const searchQ = await searchParams;
   const search = searchQ?.search || "";
 
-  const { token } = auth.api.getToken({
+  const { token } = await auth.api.getToken({
     headers: await headers(),
   });
   const queryString = search ? `?search=${encodeURIComponent(search)}` : "";

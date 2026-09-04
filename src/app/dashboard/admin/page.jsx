@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import React from "react";
 
 const adminDashboard = async () => {
-  const { token } = auth.api.getToken({
+  const { token } = await auth.api.getToken({
     headers: await headers(),
   });
   console.log("Token:", token); // Log the token to verify it's being retrieved correctly

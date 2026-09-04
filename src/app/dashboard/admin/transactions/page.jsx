@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import React from "react";
 
 const transactionsPage = async () => {
-  const { token } = auth.api.getToken({
+  const { token } = await auth.api.getToken({
     headers: await headers(),
   });
   const res = await fetch(
