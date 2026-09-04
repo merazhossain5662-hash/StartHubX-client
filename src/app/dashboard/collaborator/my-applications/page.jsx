@@ -5,11 +5,20 @@ import { Card } from "@heroui/react";
 import { MyApplicationsTable } from "@/components/MyApplicationsTable";
 
 const myApplicationsPage = async () => {
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+  console.log("Token:", token); // Log the token to verify it's being retrieved correctly
   const { user, isPending } = await auth.api.getSession({
     headers: await headers(),
   });
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/application/${user?.email}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
   );
   const data = await res.json();
   const finalData = await Promise.all(
