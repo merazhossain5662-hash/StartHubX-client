@@ -86,6 +86,8 @@ const MystartupComponent = ({ email, startupData }) => {
 
   const onSubmit = async (e) => {
     const { data: jwt, error } = await authClient.token();
+    console.log("fd sg", jwt);
+
     e.preventDefault();
     if (imageError) {
       alert("Fix image errors before submitting.");
@@ -114,7 +116,6 @@ const MystartupComponent = ({ email, startupData }) => {
       return;
     }
     alert("Startup created successfully!");
-    e.target.reset();
     router.refresh();
   };
   return (
