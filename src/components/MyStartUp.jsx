@@ -99,14 +99,19 @@ const MystartupComponent = ({ email, startupData }) => {
 
     data.profileImage = imageUrl;
     data.status = "pending";
-    await fetch(`${process.env.NEXT_PUBLIC_URI}/api/startups`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/api/startups`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-    alert("sdmfiojwo dsje");
+    if (!res.ok) {
+      alert("Failed to create startup. Try again.");
+      return;
+    }
+    alert("Startup created successfully!");
+    e.target.reset();
     router.refresh();
   };
   return (

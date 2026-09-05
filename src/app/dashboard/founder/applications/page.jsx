@@ -8,14 +8,27 @@ const applicationPage = async () => {
   const { user } = await auth.api.getSession({
     headers: await headers(), // some endpoints might require headers
   });
+  const { token } = await auth.api.getToken({
+    headers: await headers(), // some endpoints might require headers
+  });
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/startup/${user?.email}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
   );
   const startupData = await res.json();
   const startupId = startupData[0]?._id;
 
   const ApplicationsRes = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/applications/${startupId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
   );
   const applicationsData = await ApplicationsRes.json();
   const activeApplications =

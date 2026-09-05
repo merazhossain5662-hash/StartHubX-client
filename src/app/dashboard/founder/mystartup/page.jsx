@@ -9,9 +9,16 @@ const MystartupPage = async () => {
     headers: await headers(), // some endpoints might require headers
   });
   console.log(session.user.email);
-
+  const { token } = await auth.api.getToken({
+    headers: await headers(), // some endpoints might require headers
+  });
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URI}/api/startup/${session?.user?.email}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
   );
   const startupData = await res.json();
   console.log("Startup Data:", startupData[0]); // Log the startup name to the console
