@@ -23,6 +23,7 @@ import {
 import { useRouter } from "next/navigation";
 import DeleteStartup from "./DeleteStartup";
 import EditStartup from "./EditStartup";
+import { authClient } from "@/lib/auth-client";
 
 const MystartupComponent = ({ email, startupData }) => {
   const router = useRouter();
@@ -84,6 +85,7 @@ const MystartupComponent = ({ email, startupData }) => {
   };
 
   const onSubmit = async (e) => {
+    const { data: jwt, error } = await authClient.token();
     e.preventDefault();
     if (imageError) {
       alert("Fix image errors before submitting.");
@@ -103,6 +105,7 @@ const MystartupComponent = ({ email, startupData }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt?.token}`,
       },
       body: JSON.stringify(data),
     });
