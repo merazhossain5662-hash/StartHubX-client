@@ -22,7 +22,7 @@ import { authClient } from "@/lib/auth-client";
 const AppalyModal = ({ opportunityData, StartupData, user }) => {
   const getToken = async () => {
     const { data: jwt } = await authClient.token();
-    return jwt;
+    return jwt?.token;
   };
   const router = useRouter();
   const userRole = user?.role.toLowerCase();
