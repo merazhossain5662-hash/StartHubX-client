@@ -20,6 +20,10 @@ import { redirect, useRouter } from "next/navigation";
 import getDateStatus from "@/lib/actions/getDateStatus";
 import { authClient } from "@/lib/auth-client";
 const AppalyModal = ({ opportunityData, StartupData, user }) => {
+  const getToken = async () => {
+    const { data: jwt } = await authClient.token();
+    return jwt;
+  };
   const router = useRouter();
   const userRole = user?.role.toLowerCase();
   const [loading, setLoading] = useState(false);
@@ -28,10 +32,6 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
   const expDate = getDateStatus(opportunityData?.date);
   useEffect(() => {
     if (!user || !opportunityData?._id) return;
-    const getToken = async () => {
-      const { data: jwt } = await authClient.token();
-      return jwt;
-    };
 
     const fetchData = async () => {
       try {
@@ -50,7 +50,7 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
       }
     };
     fetchData();
-  }, [opportunityData?._id, user]);
+  }, [opportunityData?._id, user, getToken]);
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -70,6 +70,7 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${await getToken()}`,
       },
       body: JSON.stringify(data),
     });
