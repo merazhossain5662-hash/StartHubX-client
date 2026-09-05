@@ -18,6 +18,7 @@ import {
 } from "@heroui/react";
 import { redirect, useRouter } from "next/navigation";
 import getDateStatus from "@/lib/actions/getDateStatus";
+import { authClient } from "@/lib/auth-client";
 const AppalyModal = ({ opportunityData, StartupData, user }) => {
   const router = useRouter();
   const userRole = user?.role.toLowerCase();
@@ -27,11 +28,20 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
   const expDate = getDateStatus(opportunityData?.date);
   useEffect(() => {
     if (!user || !opportunityData?._id) return;
+    const getToken = async () => {
+      const { data: jwt } = await authClient.token();
+      return jwt;
+    };
 
     const fetchData = async () => {
       try {
         const applicationRes = await fetch(
           `${process.env.NEXT_PUBLIC_URI}/api/application/${user.email}/${opportunityData._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${await getToken()}`,
+            },
+          },
         );
         const applaidApplication = await applicationRes.json();
         setIsApplaid(applaidApplication);
