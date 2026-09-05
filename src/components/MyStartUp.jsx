@@ -85,38 +85,53 @@ const MystartupComponent = ({ email, startupData }) => {
   };
 
   const onSubmit = async (e) => {
-    const { data: jwt, error } = await authClient.token();
-    console.log("fd sg", jwt);
-
     e.preventDefault();
+
     if (imageError) {
       alert("Fix image errors before submitting.");
       return;
     }
 
-    const formData = new FormData(e.currentTarget);
-    const data = {};
+    // Get the form element reliably from event target
+    const formElement = e.target;
+    const formData = new FormData(formElement);
 
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
+    const { data: jwt } = await authClient.token();
 
-    data.profileImage = imageUrl;
-    data.status = "pending";
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/api/startups`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt?.token}`,
-      },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-      alert("Failed to create startup. Try again.");
-      return;
+    const data = {
+      FounderEmail: formData.get("FounderEmail"),
+      name: formData.get("name"),
+      state: formData.get("state"),
+      FundingStage: formData.get("FundingStage"),
+      description: formData.get("description"),
+      profileImage: imageUrl,
+      status: "pending",
+    };
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URI}/api/startups`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt?.token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      const responseData = await res.json();
+
+      if (!res.ok) {
+        console.error("Server Error Response:", responseData);
+        alert(`Error: ${responseData.message || "Failed to create startup."}`);
+        return;
+      }
+
+      alert("Startup created successfully!");
+      router.refresh();
+    } catch (err) {
+      console.error("Network Error:", err);
+      alert("Network request failed. Check your connection or API endpoint.");
     }
-    alert("Startup created successfully!");
-    router.refresh();
   };
   return (
     <div>

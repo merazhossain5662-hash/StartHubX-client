@@ -19,6 +19,7 @@ const AddOpportunityPage = async () => {
       },
     },
   );
+  console.log(session?.user?.plan); // Log the user's plan to the console
   const startupData = await res.json();
   const startupId = startupData[0]?._id;
   const opportunityRes = await fetch(
