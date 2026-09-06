@@ -21,7 +21,7 @@ const MystartupPage = async () => {
     },
   );
   const startupData = await res.json();
-  console.log("Startup Data:", startupData[0]); // Log the startup name to the console
+  console.log("Startup Data:", startupData[0]);
   return (
     <div>
       <MystartupComponent

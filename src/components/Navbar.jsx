@@ -116,7 +116,9 @@ export default function Navbar() {
             <>
               <Popover className="border border-separator bg-background shadow-lg">
                 <Popover.Trigger className="flex items-center gap-2 cursor-pointer bg-transparent border border-gray-800 backdrop-brightness-150 transition rounded-lg px-3 py-1.5">
-                  <Avatar className="h-7 w-7 ">
+                  <Avatar
+                    className={`h-7 w-7 border ${session.user?.role === "Admin" ? "border-red-600" : session?.user?.plan === "premium" ? "border-amber-500/25" : "border-gray-600"}`}
+                  >
                     <Avatar.Image alt="John Doe" src={session.user?.image} />
                     <Avatar.Fallback className="bg-[#204561]">
                       {session.user?.name?.charAt(0).toUpperCase()}
