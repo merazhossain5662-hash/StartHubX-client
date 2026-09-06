@@ -86,6 +86,7 @@ const EditStartup = ({ startupData }) => {
   };
 
   const handleUpdate = async (e, close) => {
+    setLoading(true);
     e.preventDefault();
     const { data: jwt } = await authClient.token();
     if (imageError) {
@@ -108,8 +109,8 @@ const EditStartup = ({ startupData }) => {
         {
           method: "PATCH",
           headers: {
-            Authorization: `Bearer ${jwt?.token}`,
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt?.token}`,
           },
           body: JSON.stringify(datal),
         },
@@ -117,11 +118,15 @@ const EditStartup = ({ startupData }) => {
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data?.message || "Update failed");
+      if (!res.ok) {
+        setLoading(false);
+        throw new Error(data?.message || "Update failed");
+      }
 
       if (close) close();
       router.refresh();
     } catch (err) {
+      setLoading(false);
       console.error("UPDATE ERROR:", err);
       alert(err.message);
     }
@@ -326,11 +331,11 @@ const EditStartup = ({ startupData }) => {
                       {/* SUBMIT BUTTON */}
                       <Button
                         type="submit"
-                        disabled={loading}
+                        isDisabled={loading}
                         className="text-[#c4e1f0]/70 rounded-md hover:text-[#6998AB] hover:bg-[#1e4360]/15 hover:rounded-lg transition-all duration-300 ease-in-out hover:translate-x-0.5 py-4 border border-[#2182cd] bg-[#1e4360]/50 px-3 w-full"
                       >
                         <Pencil />
-                        Update Now
+                        {loading ? "Updating..." : "Update Now"}
                       </Button>
                     </Form>
                   </Modal.Body>

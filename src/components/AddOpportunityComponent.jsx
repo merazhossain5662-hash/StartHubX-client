@@ -26,32 +26,62 @@ const AddOpportunityComponent = ({ startupData, totalCount, userPlan }) => {
   const [value, setValue] = useState(null);
   const currentDate = today(getLocalTimeZone());
   const isInvalid = value != null && value.compare(currentDate) < 0;
-
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    console.log("Form Data Entries:", Array.from(formData.entries()));
-    const data = {};
+    try {
+      // 1. Retrieve raw auth token
+      const tokenRes = await authClient.token();
+      const token = tokenRes?.data?.token || tokenRes?.data;
 
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-    data.startupId = startupData?._id;
-    data.Skills = data?.Skills.split(",");
-    data.industry = startupData?.state;
-    console.log("Form Data:", data);
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URI}/api/opportunity`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const form = e.target;
+
+      // 2. Format required payload safely
+      const rawSkills = form.elements.namedItem("Skills")?.value || "";
+      const skillsArray = rawSkills
+        ? rawSkills.split(",").map((s) => s.trim())
+        : [];
+
+      const data = {
+        Title: form.elements.namedItem("Title")?.value,
+        Skills: skillsArray,
+        workType: workType,
+        CommitmentLevel: commitmentLevel,
+        date: value ? value.toString() : null, // Converts CalendarDate to ISO/String
+        startupId: startupData?._id,
+        industry: startupData?.state,
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URI}/api/opportunity`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      },
-    );
-    redirect("/dashboard/founder/manage-opportunities");
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        alert(`Error: ${errorData.message || "Failed to post opportunity."}`);
+        setLoading(false);
+        return;
+      }
+
+      alert("Opportunity added successfully!");
+
+      router.push("/dashboard/founder/manage-opportunities");
+      router.refresh();
+    } catch (err) {
+      console.error("Submission Error:", err);
+      alert("A network error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div>
