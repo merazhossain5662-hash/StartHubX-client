@@ -24,9 +24,19 @@ import { authClient } from "@/lib/auth-client";
 
 const EditStartup = ({ startupData }) => {
   const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
+
+  // 1. Separate image upload loading state from form submit loading state
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
   const [imageError, setImageError] = useState("");
   const [imageUrl, setImageUrl] = useState(startupData?.profileImage || "");
+
+  // 2. Track select dropdown values with state
+  const [industry, setIndustry] = useState(startupData?.state || "");
+  const [fundingStage, setFundingStage] = useState(
+    startupData?.FundingStage || "",
+  );
 
   const router = useRouter();
 
@@ -39,110 +49,114 @@ const EditStartup = ({ startupData }) => {
 
     setImageError("");
 
-    // ✅ TYPE VALIDATION
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
       setImageError("Only JPG, PNG, or WEBP images are allowed.");
       return;
     }
 
-    // ✅ SIZE VALIDATION (2MB)
     const maxSize = 2 * 1024 * 1024;
     if (file.size > maxSize) {
       setImageError("Image must be less than 2MB.");
       return;
     }
 
-    // ✅ PREVIEW
     const previewUrl = URL.createObjectURL(file);
     setPreview(previewUrl);
 
-    // ✅ UPLOAD TO IMGBB
     const formData = new FormData();
     formData.append("image", file);
 
-    setLoading(true);
+    setUploadingImage(true);
 
     try {
-      const res = await fetch(
-        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+      const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
+      if (!apiKey) {
+        throw new Error("ImgBB API key is missing in environment variables.");
+      }
+
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: "POST",
+        body: formData,
+      });
 
       const data = await res.json();
       if (data?.data?.url) {
         setImageUrl(data.data.url);
       } else {
-        throw new Error("Upload failed");
+        throw new Error(data?.error?.message || "Image upload failed");
       }
     } catch (err) {
-      setImageError("Upload failed. Try again.");
+      console.error("UPLOAD ERROR:", err);
+      setImageError(err.message || "Upload failed. Try again.");
     } finally {
-      setLoading(false);
+      setUploadingImage(false);
     }
   };
 
   const handleUpdate = async (e, close) => {
-    setLoading(true);
     e.preventDefault();
-    const { data: jwt } = await authClient.token();
+
     if (imageError) {
       alert("Fix image errors before submitting.");
       return;
     }
 
-    const formData = new FormData(e.currentTarget);
-    const datal = {};
-
-    formData.forEach((value, key) => {
-      datal[key] = value;
-    });
-
-    datal.profileImage = imageUrl || startupData?.profileImage;
+    setSubmitting(true);
 
     try {
+      const { data: jwt } = await authClient.token();
+      const token = jwt?.token || jwt;
+      const form = e.target;
+
+      const payload = {
+        FounderEmail: form.elements.namedItem("FounderEmail")?.value,
+        name: form.elements.namedItem("name")?.value,
+        state: industry || startupData?.state,
+        FundingStage: fundingStage || startupData?.FundingStage,
+        description: form.elements.namedItem("description")?.value,
+        profileImage: imageUrl || startupData?.profileImage,
+      };
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_URI}/api/startups/${startupData?._id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jwt?.token}`,
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(datal),
+          body: JSON.stringify(payload),
         },
       );
 
-      const data = await res.json();
+      const responseData = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        setLoading(false);
-        throw new Error(data?.message || "Update failed");
+        throw new Error(responseData?.message || "Update failed");
       }
 
+      alert("Startup updated successfully!");
       if (close) close();
       router.refresh();
     } catch (err) {
-      setLoading(false);
       console.error("UPDATE ERROR:", err);
-      alert(err.message);
+      alert(err.message || "Failed to update startup.");
+    } finally {
+      // Always reset submitting state regardless of success or error
+      setSubmitting(false);
     }
   };
 
   return (
     <div>
       <Modal>
-        {/* Trigger Button inside Modal auto-wires opening */}
         <Button className="text-[#c4e1f0]/70 rounded-md hover:text-[#6998AB] hover:bg-[#1e4360]/15 hover:rounded-lg transition-all duration-300 ease-in-out hover:translate-x-0.5 py-4 border border-[#2182cd] bg-[#1e4360]/50 px-3">
           <Pencil />
           Edit
         </Button>
         <Modal.Backdrop>
           <Modal.Container>
-            {/* HeroUI render function provides `close` helper */}
             <Modal.Dialog className="sm:max-w-[360px]">
               {({ close }) => (
                 <>
@@ -217,13 +231,15 @@ const EditStartup = ({ startupData }) => {
                           <label className="mt-1 w-full flex items-center justify-between gap-3 border border-[#83d5fe]/70 rounded-xl px-4 py-2 cursor-pointer hover:bg-indigo-500/10 transition">
                             <div className="flex items-center gap-2 w-full text-sm text-[#8dd10f2]">
                               <span className="text-center w-full">
-                                {loading ? "Uploading..." : "Upload Logo"}
+                                {uploadingImage
+                                  ? "Uploading..."
+                                  : "Upload Logo"}
                               </span>
                             </div>
 
                             <input
                               type="file"
-                              disabled={loading}
+                              disabled={uploadingImage || submitting}
                               onChange={handleImageChange}
                               className="hidden"
                             />
@@ -242,9 +258,14 @@ const EditStartup = ({ startupData }) => {
                         <Select
                           className="w-full"
                           isRequired
-                          defaultValue={startupData?.state}
+                          defaultSelectedKeys={[
+                            startupData?.state || "Technology",
+                          ]}
                           placeholder="Select Industry"
                           name="state"
+                          onSelectionChange={(keys) =>
+                            setIndustry(Array.from(keys)[0])
+                          }
                         >
                           <label className="text-xs text-gray-400">
                             Industry
@@ -282,9 +303,14 @@ const EditStartup = ({ startupData }) => {
                         <Select
                           className="w-full"
                           isRequired
-                          defaultValue={startupData?.FundingStage}
+                          defaultSelectedKeys={[
+                            startupData?.FundingStage || "Seed",
+                          ]}
                           placeholder="Select Funding Stage"
                           name="FundingStage"
+                          onSelectionChange={(keys) =>
+                            setFundingStage(Array.from(keys)[0])
+                          }
                         >
                           <label className="text-xs text-gray-400">
                             Funding Stage
@@ -331,11 +357,11 @@ const EditStartup = ({ startupData }) => {
                       {/* SUBMIT BUTTON */}
                       <Button
                         type="submit"
-                        isDisabled={loading}
-                        className="text-[#c4e1f0]/70 rounded-md hover:text-[#6998AB] hover:bg-[#1e4360]/15 hover:rounded-lg transition-all duration-300 ease-in-out hover:translate-x-0.5 py-4 border border-[#2182cd] bg-[#1e4360]/50 px-3 w-full"
+                        isDisabled={submitting || uploadingImage}
+                        className="text-[#c4e1f0]/70 rounded-md hover:text-[#6998AB] hover:bg-[#1e4360]/15 hover:rounded-lg transition-all duration-300 ease-in-out hover:translate-x-0.5 py-4 border border-[#2182cd] bg-[#1e4360]/50 px-3 w-full disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Pencil />
-                        {loading ? "Updating..." : "Update Now"}
+                        {submitting ? "Updating..." : "Update Now"}
                       </Button>
                     </Form>
                   </Modal.Body>
