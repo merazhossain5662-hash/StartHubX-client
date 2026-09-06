@@ -55,7 +55,7 @@ const AppalyModal = ({ opportunityData, StartupData, user }) => {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(e.target);
     const data = {};
     // Convert FormData to plain object
     formData.forEach((value, key) => {
