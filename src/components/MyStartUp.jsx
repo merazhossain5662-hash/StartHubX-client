@@ -86,6 +86,7 @@ const MystartupComponent = ({ email, startupData }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (imageError) {
       alert("Fix image errors before submitting.");
@@ -121,6 +122,7 @@ const MystartupComponent = ({ email, startupData }) => {
       const responseData = await res.json();
 
       if (!res.ok) {
+        setLoading(false);
         console.error("Server Error Response:", responseData);
         alert(`Error: ${responseData.message || "Failed to create startup."}`);
         return;
@@ -131,6 +133,8 @@ const MystartupComponent = ({ email, startupData }) => {
     } catch (err) {
       console.error("Network Error:", err);
       alert("Network request failed. Check your connection or API endpoint.");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -432,6 +436,7 @@ const MystartupComponent = ({ email, startupData }) => {
               {/* SUBMIT */}
               <Button
                 type="submit"
+                isDisabled={loading}
                 className="w-full rounded-xl py-5 text-sm font-medium bg-linear-to-r from-[#2a587b] via-[#437fac] to-[#6bc8f6] hover:opacity-90 transition"
               >
                 Create Account

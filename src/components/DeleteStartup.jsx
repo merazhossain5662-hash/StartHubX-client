@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { TrashBin } from "@gravity-ui/icons";
 import { Button, Modal } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const DeleteStartup = ({ id }) => {
   const [loading, setLoading] = useState(false);
@@ -10,13 +11,17 @@ const DeleteStartup = ({ id }) => {
 
   const handleDelete = async () => {
     setLoading(true);
-
+    const { data: jwt } = await authClient.token();
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_URI}/api/startups/${id}`,
 
         {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt?.token}`,
+          },
         },
       );
 

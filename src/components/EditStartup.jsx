@@ -20,6 +20,7 @@ import {
   Select,
   ListBox,
 } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 const EditStartup = ({ startupData }) => {
   const [preview, setPreview] = useState(null);
@@ -86,6 +87,7 @@ const EditStartup = ({ startupData }) => {
 
   const handleUpdate = async (e, close) => {
     e.preventDefault();
+    const { data: jwt } = await authClient.token();
     if (imageError) {
       alert("Fix image errors before submitting.");
       return;
@@ -106,6 +108,7 @@ const EditStartup = ({ startupData }) => {
         {
           method: "PATCH",
           headers: {
+            Authorization: `Bearer ${jwt?.token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(datal),
