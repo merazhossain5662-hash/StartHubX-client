@@ -177,9 +177,14 @@ const MystartupComponent = ({ email, startupData }) => {
                           <CircleFill width={6} />
                           <Chip.Label>{startupData.FundingStage}</Chip.Label>
                         </Chip>
-                        <Chip color="warning" variant="soft">
+                        <Chip
+                          className={`${startupData?.status === "pending" ? "bg-amber-500/25" : startupData?.status === "approved" ? "bg-green-500/30" : "bg-gray-500/30"}`}
+                          variant="soft"
+                        >
                           <Clock width={12} />
-                          <Chip.Label>{startupData.status}</Chip.Label>
+                          <Chip.Label>
+                            {startupData.status.toUpperCase()}
+                          </Chip.Label>
                         </Chip>
                       </div>
                     </div>

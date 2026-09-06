@@ -215,7 +215,6 @@ export default function Navbar() {
                 <Popover.Content className="max-w-64 bg-transparent border backdrop-blur-sm">
                   <Popover.Dialog className="w-full">
                     <Popover.Arrow />
-
                     <ul className="flex flex-col gap-2 max-w-50">
                       <Link
                         href={`/dashboard/${session.user.role?.toLowerCase()}`}
@@ -239,6 +238,7 @@ export default function Navbar() {
                         <li className="">Logout</li>
                       </button>
                     </ul>
+                    +
                   </Popover.Dialog>
                 </Popover.Content>
               </Popover>

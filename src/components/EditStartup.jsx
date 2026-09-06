@@ -252,20 +252,15 @@ const EditStartup = ({ startupData }) => {
                         </p>
                       )}
 
-                      {/* INDUSTRY & FUNDING STAGE */}
                       <div className="flex md:flex-row flex-col gap-3">
-                        {/* Industry */}
                         <Select
                           className="w-full"
                           isRequired
-                          defaultSelectedKeys={[
-                            startupData?.state || "Technology",
-                          ]}
-                          placeholder="Select Industry"
                           name="state"
-                          onSelectionChange={(keys) =>
-                            setIndustry(Array.from(keys)[0])
-                          }
+                          placeholder="Select Industry"
+                          defaultValue={startupData?.state || "Technology"}
+                          value={industry}
+                          onChange={(val) => setIndustry(val)}
                         >
                           <label className="text-xs text-gray-400">
                             Industry
@@ -299,18 +294,14 @@ const EditStartup = ({ startupData }) => {
                           </Select.Popover>
                         </Select>
 
-                        {/* Funding Stage */}
                         <Select
                           className="w-full"
                           isRequired
-                          defaultSelectedKeys={[
-                            startupData?.FundingStage || "Seed",
-                          ]}
-                          placeholder="Select Funding Stage"
                           name="FundingStage"
-                          onSelectionChange={(keys) =>
-                            setFundingStage(Array.from(keys)[0])
-                          }
+                          placeholder="Select Funding Stage"
+                          defaultValue={startupData?.FundingStage || "Seed"}
+                          value={fundingStage}
+                          onChange={(val) => setFundingStage(val)}
                         >
                           <label className="text-xs text-gray-400">
                             Funding Stage
