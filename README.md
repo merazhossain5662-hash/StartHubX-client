@@ -34,8 +34,6 @@
 
 </div>
 
-> 📌 Add your own screenshots: capture the live site at `https://start-hub-x-client.vercel.app/` in a wide desktop browser window and again in a mobile-width/responsive view, save them as `docs/desktop-preview.png` and `docs/mobile-preview.png`, and commit them to the repo so they render here.
-
 ## 📖 About
 
 **StartHubX** is a platform that connects founders, developers, designers, and creators to turn ideas into real products. It lets founders post their startups and open roles, and lets collaborators discover opportunities, apply, and join teams — helping people find the right team, collaborate seamlessly, and bring startups to life faster.
